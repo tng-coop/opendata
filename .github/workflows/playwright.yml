@@ -32,7 +32,7 @@ jobs:
       run: php -S localhost:8000 app.php &
 
     - name: Install dependencies
-      run: docker run --rm --network="host" -v $(pwd):/repo -w /repo/e2e ${{ env.PLAYWRIGHT_IMAGE }} npm ci
+      run: docker run --rm --network="host" -v $(pwd):/repo -w /repo ${{ env.PLAYWRIGHT_IMAGE }} npm ci
 
     - name: Show Playwright version
       run: docker run --rm --network="host" -v $(pwd):/repo -w /repo/e2e ${{ env.PLAYWRIGHT_IMAGE }} npx playwright --version
