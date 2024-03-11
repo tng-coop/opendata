@@ -29,7 +29,7 @@ jobs:
       run: composer -v
 
     - name: Run PHP
-      run: php -S localhost:8000 app.php &
+      run: php -S localhost:8000 index.php &
 
     - name: Install dependencies
       run: docker run --rm --network="host" -v $(pwd):/repo -w /repo ${{ env.PLAYWRIGHT_IMAGE }} npm ci
