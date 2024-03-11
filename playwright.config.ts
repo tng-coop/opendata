@@ -34,7 +34,10 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        baseURL: 'http://localhost:8000',
+        ...devices['Desktop Chrome'] 
+      },
     },
 
     // {

@@ -4,6 +4,6 @@ test('has title', async ({ page }) => {
   await page.goto('/');
 
   // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+  await expect(page.locator('html')).toHaveText('Current URL: http://localhost:8000/')
 });
 
