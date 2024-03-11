@@ -1,4 +1,4 @@
-name: PHP CI with MariaDB
+name: Open Data Tests
 
 on:
   push:
@@ -27,8 +27,6 @@ jobs:
 
     - name: Show PHP Composer Version
       run: composer -v
-
-
 
     - name: Install dependencies
       run: docker run --rm --network="host" -v $(pwd):/repo -w /repo/e2e ${{ env.PLAYWRIGHT_IMAGE }} npm ci
