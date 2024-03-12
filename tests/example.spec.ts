@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 test('has title', async ({ page, baseURL } ) => {
+  if (!baseURL) { throw new Error('baseURL is not defined') }
   await page.goto('./');
-
-  // Expect a title "to contain" a substring.
-  await expect(page.locator('html')).toHaveText(`Current URL: ${baseURL}`)
+  // verify url
+  await expect(page).toHaveURL(baseURL);
 });
 
