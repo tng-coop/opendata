@@ -25,12 +25,20 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.opendata (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
-    json json
+    id uuid NOT NULL,
+    json json NOT NULL
 );
 
 
 ALTER TABLE public.opendata OWNER TO yasu;
+
+--
+-- Name: opendata id_unique; Type: CONSTRAINT; Schema: public; Owner: yasu
+--
+
+ALTER TABLE ONLY public.opendata
+    ADD CONSTRAINT id_unique UNIQUE (id);
+
 
 --
 -- Name: opendata opendata_pkey; Type: CONSTRAINT; Schema: public; Owner: yasu
