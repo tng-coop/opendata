@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Rewrite URLs of the form 'uuid/[uuid-value]' to 'index.php'
+RewriteRule ^uuid/([0-9a-fA-F-]+)$ index.php [NC,L]
+
+# Additionally, ensure requests for actual files and directories are not rewritten
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
