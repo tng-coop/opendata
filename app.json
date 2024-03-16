@@ -1,5 +1,7 @@
 {
-    "datadir": {
-        "openjson": "../openjson"
+    "database": {
+        "host": "localhost",
+        "dbname": "tng",
+        "pass": "tng123"
     }
 }
