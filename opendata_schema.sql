@@ -26,7 +26,9 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.opendata (
     id uuid NOT NULL,
-    json json NOT NULL
+    json json NOT NULL,
+    password text,
+    email text
 );
 
 
@@ -46,6 +48,13 @@ ALTER TABLE ONLY public.opendata
 
 ALTER TABLE ONLY public.opendata
     ADD CONSTRAINT opendata_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idx_encrypted_email; Type: INDEX; Schema: public; Owner: yasu
+--
+
+CREATE INDEX idx_encrypted_email ON public.opendata USING btree (email);
 
 
 --
