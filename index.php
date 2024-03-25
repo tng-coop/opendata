@@ -24,6 +24,7 @@ if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_uuid'])) {
     $uuid4 = Uuid::uuid4();
     $_SESSION['generated_uuid'] = $uuid4->toString();
+    insertOpDataWithUuid($uuid4); 
     setcookie('persistent_uuid', $uuid, time() + (365 * 24 * 60 * 60), '/');
     $redirectPath = rtrim($scriptPathDir, '/') . '/uuid/' . $uuid4->toString();
     header('Location: ' . $redirectPath);
