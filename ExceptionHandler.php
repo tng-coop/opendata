@@ -11,7 +11,18 @@ function customErrorLogger($data)
     $formattedMessage = sprintf("[%s] %s\n", $date->format('Y-m-d H:i:s'), $formattedData);
 
     // Append the formatted message to the log file
-    file_put_contents($logFilePath, $formattedMessage, FILE_APPEND);
+    file_put_contents($logFilePath, $formattedMessage, FILE_APPEND  | LOCK_EX);
+}
+
+function handleError($errno, $errstr, $errfile, $errline) {
+    $errorData = [
+        'type' => 'Error',
+        'code' => $errno,
+        'message' => $errstr,
+        'file' => $errfile,
+        'line' => $errline,
+    ];
+    customErrorLogger($errorData);
 }
 
 
