@@ -71,7 +71,7 @@
         window.onload = function() {
             const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
             const xxx = JSON.parse(localStorage.getItem(lastUpdateKey));
-            const lastUpdateFromLocalStorage = xxx['<?php echo $uuidFromSession?>'];
+            const lastUpdateFromLocalStorage = xxx?.['<?php echo $uuidFromSession?>'];
             const contentFromDb = base64DecodeUtf8('<?php echo base64_encode($textToDisplay); ?>');
             console.log('<?php echo json_encode($result) ?>');
 
