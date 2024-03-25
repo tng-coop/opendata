@@ -5,3 +5,4 @@ node_modules
 /playwright/.cache/
 /vendor
 php_server_*
+custom_error*
