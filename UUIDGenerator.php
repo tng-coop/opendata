@@ -5,7 +5,7 @@ function generateAndRedirect($scriptPathDir) {
     try {
         $uuid4 = Uuid::uuid4();
         $_SESSION['generated_uuid'] = $uuid4->toString();
-        header('Location: ' . $scriptPathDir . './uuid/' . $uuid4->toString());
+        header('Location: ' . $scriptPathDir . '/uuid/' . $uuid4->toString());
         exit;
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
