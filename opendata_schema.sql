@@ -16,6 +16,22 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: update_last_modified(); Type: FUNCTION; Schema: public; Owner: yasu
+--
+
+CREATE FUNCTION public.update_last_modified() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    NEW.last_update = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.update_last_modified() OWNER TO yasu;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
