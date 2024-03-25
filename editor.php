@@ -11,6 +11,7 @@
 <body>
     <?php
 
+    error_log("editor.php accessed");
     $textToDisplay = ""; // Variable to hold the text to be displayed in the textarea
 
     // Check if the UUID is stored in the session
@@ -19,7 +20,7 @@
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Retrieve the submitted text content
             $submittedText = $_POST['textEditorContent'] ?? '';
-            appendOpDataWithUuid($uuidFromSession, $submittedText);
+            appendOpDataWithUuid($uuidFromSession, ['text' => $submittedText]);
         }
         echo "UUID from URL: " . $uuidFromSession . "<br>";
         // Fetch the initial JSON and last_update using the function
@@ -27,6 +28,7 @@
 
         if ($result && !empty($result['json'])) {
             // Assuming getLastElementText function is defined and available
+            error_log("json: " . json_encode($result['json']));
             $textToDisplay = getLastElementText($result['json']); // Pass the JSON string from the 'json' key to the function
         }
     } else {
@@ -56,11 +58,12 @@
         window.onload = function() {
             const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
             const lastUpdateFromLocalStorage = localStorage.getItem(lastUpdateKey);
-            const contentFromDb = '<?php echo $textToDisplay; ?>'; // addslashes to escape any single quotes in the JSON string
+            const contentFromDb = atob('<?php echo base64_encode($textToDisplay); ?>');
             console.log('<?php echo json_encode($result) ?>');
 
-
-            if (lastUpdateFromDb && new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage)) {
+            console.log('Last update from DB:', new Date(lastUpdateFromDb))
+            console.log('Last update from localStorage:', new Date(lastUpdateFromLocalStorage));
+            if (new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage)) {
                 console.log('Loading content from DB')
                 console.log('Last update from DB:', lastUpdateFromDb)
                 console.log('Last update from localStorage:', lastUpdateFromLocalStorage)
