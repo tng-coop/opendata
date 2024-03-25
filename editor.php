@@ -13,9 +13,15 @@
 
     $textToDisplay = ""; // Variable to hold the text to be displayed in the textarea
 
+
     // Check if the UUID is stored in the session
     if (isset($_SESSION['currentDataUuid']) && !empty($_SESSION['currentDataUuid'])) {
         $uuidFromSession = htmlspecialchars($_SESSION['currentDataUuid']); // Sanitize the UUID to prevent XSS attacks
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            // Retrieve the submitted text content
+            $submittedText = $_POST['textEditorContent'] ?? '';
+            appendOpDataWithUuid($_uuidFromSession, $submittedText);
+        }
         echo "UUID from URL: " . $uuidFromSession . "<br>";
         // Fetch the initial JSON and last_update using the function
         $result = fetchJsonForUuid($uuidFromSession);
@@ -48,7 +54,7 @@
         }
 
         window.onload = function() {
-            const lastUpdateFromDb = '<?php echo $result? $result['last_update'] : ''; ?>';
+            const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
             const lastUpdateFromLocalStorage = localStorage.getItem(lastUpdateKey);
             const contentFromDb = '<?php echo $result ? addslashes($result['json']) : ''; ?>'; // addslashes to escape any single quotes in the JSON string
 
@@ -71,7 +77,7 @@
             // Save the textarea content to localStorage every 5 seconds
             setInterval(function() {
                 const editorContent = document.getElementById('textEditor').value;
-                saveToLocalStorage(editorContent, lastUpdateFromDb );
+                saveToLocalStorage(editorContent, lastUpdateFromDb);
             }, 5000);
         };
     </script>

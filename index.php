@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_uuid'])) {
     $uuid4 = Uuid::uuid4();
     $_SESSION['generated_uuid'] = $uuid4->toString();
     insertOpDataWithUuid($uuid4); 
-    setcookie('persistent_uuid', $uuid, time() + (365 * 24 * 60 * 60), '/');
+    setcookie('persistent_uuid', $uuid4, time() + (365 * 24 * 60 * 60), '/');
     $redirectPath = rtrim($scriptPathDir, '/') . '/uuid/' . $uuid4->toString();
     header('Location: ' . $redirectPath);
     exit;
@@ -90,11 +90,6 @@ if (isset($_SESSION['currentDataUuid']) && !empty($_SESSION['currentDataUuid']))
 ?>
     <form method="post">
         <input type="submit" name="generate_uuid" value="Generate UUID">
-        <br>
-        <br>
-        <input type="text" name="uuid" value="<?php echo $uuidFromSession; ?>" size="40">
-        <br>
-        <input type="submit" name="goto_uuid" value="Go to My ID">
     </form>
 <?php
 }
