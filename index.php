@@ -90,6 +90,11 @@ if (isset($_SESSION['currentDataUuid']) && !empty($_SESSION['currentDataUuid']))
 ?>
     <form method="post">
         <input type="submit" name="generate_uuid" value="Generate UUID">
+        <br>
+        <br>
+        <input type="text" name="uuid"  size="40">
+        <br>
+        <input type="submit" name="goto_uuid" value="Go to My ID">
     </form>
 <?php
 }

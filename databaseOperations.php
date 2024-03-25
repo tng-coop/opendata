@@ -97,11 +97,8 @@ function appendOpDataWithUuid($uuid, $newData)
 function getLastElementText($dataArray) {
     // Check if the array is empty
     if (empty($dataArray)) {
-        error_log("The JSON array is empty.");
         return "";
     }
-    error_log("The JSON array is not empty.");
- 
     // Get the last element of the array
     $lastElement = end($dataArray);
     
