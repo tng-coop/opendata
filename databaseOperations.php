@@ -1,18 +1,16 @@
 <?php
 require 'DatabaseConnector.php';
 
-function performDatabaseOperation() {
+function fetchOpDataCount() {
     try {
         $databaseConnector = new DatabaseConnector();
         $pdo = $databaseConnector->getConnection();
         $sql = 'SELECT count(*) FROM opendata;';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        while ($row = $stmt->fetch()) {
-            echo json_encode($row) . PHP_EOL;
-        }
+        $stmt = $pdo->query($sql); // For a simple, parameter-less query, query() is sufficient
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (\PDOException $e) {
-        echo "Error: " . $e->getMessage();
-        exit;
+        // Consider logging the error here instead of directly outputting it
+        throw new Exception("Database error: " . $e->getMessage());
     }
 }
+

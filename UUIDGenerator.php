@@ -15,12 +15,6 @@ function generateAndRedirect($scriptPathDir) {
     }
 }
 
-function displayUUIDFromSession() {
-    if (isset($_SESSION['generated_uuid'])) {
-        echo "Generated UUID: " . $_SESSION['generated_uuid'] . "<br>";
-        unset($_SESSION['generated_uuid']);
-    }
-}
 
 function displayUUIDFromUrl($uuidFromUrl) {
     echo "UUID from URL: " . htmlspecialchars($uuidFromUrl) . "<br>";
