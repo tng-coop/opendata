@@ -26,9 +26,10 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.opendata (
     id uuid NOT NULL,
-    json json NOT NULL,
+    json json DEFAULT '[]'::json NOT NULL,
     password text,
-    email text
+    email text,
+    last_update timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -55,6 +56,13 @@ ALTER TABLE ONLY public.opendata
 --
 
 CREATE INDEX idx_encrypted_email ON public.opendata USING btree (email);
+
+
+--
+-- Name: opendata set_last_update; Type: TRIGGER; Schema: public; Owner: yasu
+--
+
+CREATE TRIGGER set_last_update BEFORE INSERT OR UPDATE ON public.opendata FOR EACH ROW EXECUTE FUNCTION public.update_last_modified();
 
 
 --
