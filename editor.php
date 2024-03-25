@@ -28,8 +28,8 @@
 
         if ($result && !empty($result['json'])) {
             // Assuming getLastElementText function is defined and available
-            error_log("json: " . json_encode($result['json']));
             $textToDisplay = getLastElementText($result['json']); // Pass the JSON string from the 'json' key to the function
+            error_log("Text to display: " . $textToDisplay);
         }
     } else {
         echo "No UUID provided.";
@@ -44,6 +44,11 @@
         <textarea id="textEditor" name="textEditorContent" rows="10" cols="50"></textarea><br>
         <input type="submit" value="Submit">
     </form>
+    <!-- Go to Top Link -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="./" style="text-decoration: none; font-size: 16px;">Go to Top</a>
+    </div>
+
 
     <script>
         const localStorageKey = 'textEditorContent';
@@ -55,10 +60,15 @@
             localStorage.setItem(lastUpdateKey, lastUpdate);
         }
 
+        function base64DecodeUtf8(str) {
+            return decodeURIComponent(Array.prototype.map.call(atob(str), (c) => {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        }
         window.onload = function() {
             const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
             const lastUpdateFromLocalStorage = localStorage.getItem(lastUpdateKey);
-            const contentFromDb = atob('<?php echo base64_encode($textToDisplay); ?>');
+            const contentFromDb = base64DecodeUtf8('<?php echo base64_encode($textToDisplay); ?>');
             console.log('<?php echo json_encode($result) ?>');
 
             console.log('Last update from DB:', new Date(lastUpdateFromDb))

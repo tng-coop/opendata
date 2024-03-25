@@ -106,5 +106,7 @@ function getLastElementText($dataArray) {
     $lastElement = end($dataArray);
     
     // Check if the "text" key exists and return its value, otherwise return an empty string
-    return isset($lastElement["text"]) ? $lastElement["text"] : "";
+    $txt= isset($lastElement["text"]) ? $lastElement["text"] : "";
+    return $txt;
+
 }
