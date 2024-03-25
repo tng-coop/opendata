@@ -1,19 +1,23 @@
 <?php
-function myExceptionHandler($exception) {
+function myExceptionHandler($exception)
+{
     http_response_code(500); // Set a generic server error response code.
 
-    // Detailed exception data for logging.
-    $debugData = [
-        'type' => get_class($exception),
-        'message' => $exception->getMessage(),
-        'file' => $exception->getFile(),
-        'line' => $exception->getLine(),
-        'stackTrace' => $exception->getTraceAsString(),
-    ];
+  // Preprocess the stack trace to improve readability
+  $stackTrace = explode("\n", $exception->getTraceAsString());
+  $stackTrace = array_map('trim', $stackTrace); // Trim each line
 
-    // Log the detailed error information as a JSON string for better readability and structure.
-    error_log(json_encode($debugData));
+  // Detailed exception data for logging.
+  $debugData = [
+      'type' => get_class($exception),
+      'message' => $exception->getMessage(),
+      'file' => $exception->getFile(),
+      'line' => $exception->getLine(),
+      'stackTrace' => $stackTrace, // Use the preprocessed stack trace
+  ];
 
+  // Log the detailed error information as a JSON string for better readability and structure.
+  error_log(json_encode($debugData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     // Prepare a user-friendly error message for the client.
     $response = [
         'success' => false,
