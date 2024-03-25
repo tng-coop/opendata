@@ -29,6 +29,21 @@ function fetchJsonForUuid($uuid) {
     
     return $result;
 }
+function fetchLatestBBS() {
+    $databaseConnector = new DatabaseConnector();
+    $pdo = $databaseConnector->getConnection();
+
+    // Corrected SQL query to select id, last_update, and the text of the last element in the JSON array
+    // Using PostgreSQL syntax for JSON data manipulation
+    $sql = "SELECT id, last_update, (json->(json_array_length(json) - 1))->>'text' AS last_element
+            FROM opendata
+            ORDER BY last_update DESC;";
+
+    $stmt = $pdo->query($sql); // For a simple, parameter-less query, query() is sufficient
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 
 function insertOpDataWithUuid($uuid) {

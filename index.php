@@ -24,7 +24,7 @@ if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_uuid'])) {
     $uuid4 = Uuid::uuid4();
     $_SESSION['generated_uuid'] = $uuid4->toString();
-    insertOpDataWithUuid($uuid4); 
+    insertOpDataWithUuid($uuid4);
     setcookie('persistent_uuid', $uuid4, time() + (365 * 24 * 60 * 60), '/');
     $redirectPath = rtrim($scriptPathDir, '/') . '/uuid/' . $uuid4->toString();
     header('Location: ' . $redirectPath);
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goto_uuid'])) {
     if (!Uuid::isValid($uuid)) {
         throw new Exception("Invalid UUID format.");
     }
-    
+
     // Check if a cookie named 'persistent_uuid' is not set and set it with the current UUID
     if (!isset($_COOKIE['persistent_uuid'])) {
         // Set the cookie to expire in 1 year (365 days)
@@ -92,11 +92,39 @@ if (isset($_SESSION['currentDataUuid']) && !empty($_SESSION['currentDataUuid']))
         <input type="submit" name="generate_uuid" value="Generate UUID">
         <br>
         <br>
-        <input type="text" name="uuid"  size="40">
+        <input type="text" name="uuid" size="40">
         <br>
         <input type="submit" name="goto_uuid" value="Go to My ID">
     </form>
 <?php
+    // Displaying the latest BBS entries in an Excel-like table
+    function displayLatestBBSTable()
+    {
+        $latestBBS = fetchLatestBBS();
+
+        if (!empty($latestBBS)) {
+            echo "<h2>Latest BBS Entries</h2>";
+            echo "<table border='1' style='width: 100%; border-collapse: collapse;'>";
+            echo "<tr>";
+            echo "<th>ID</th>";
+            echo "<th>Last Update</th>";
+            echo "<th>Last Element Text</th>";
+            echo "</tr>";
+
+            foreach ($latestBBS as $entry) {
+                echo "<tr>";
+                echo "<td>" . htmlspecialchars($entry['id']) . "</td>";
+                echo "<td>" . htmlspecialchars($entry['last_update']) . "</td>";
+                echo "<td>" . htmlspecialchars($entry['last_element']) . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "<p>No BBS entries found.</p>";
+        }
+    }
+
+    displayLatestBBSTable();
 }
 
 $data = fetchOpDataCount(); // Let global exception handler manage any errors.
