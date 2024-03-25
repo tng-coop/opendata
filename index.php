@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['forget_uuid'])) {
     }
 
     // Redirect to the homepage or login page
-    header('Location: /');
+    header('Location: ./');
     exit;
 }
 
