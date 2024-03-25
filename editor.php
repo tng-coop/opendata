@@ -13,14 +13,13 @@
 
     $textToDisplay = ""; // Variable to hold the text to be displayed in the textarea
 
-
     // Check if the UUID is stored in the session
     if (isset($_SESSION['currentDataUuid']) && !empty($_SESSION['currentDataUuid'])) {
         $uuidFromSession = htmlspecialchars($_SESSION['currentDataUuid']); // Sanitize the UUID to prevent XSS attacks
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Retrieve the submitted text content
             $submittedText = $_POST['textEditorContent'] ?? '';
-            appendOpDataWithUuid($_uuidFromSession, $submittedText);
+            appendOpDataWithUuid($uuidFromSession, $submittedText);
         }
         echo "UUID from URL: " . $uuidFromSession . "<br>";
         // Fetch the initial JSON and last_update using the function
@@ -49,6 +48,7 @@
         const lastUpdateKey = 'lastUpdate';
 
         function saveToLocalStorage(content, lastUpdate) {
+            console.log('Saving content to localStorage');
             localStorage.setItem(localStorageKey, content);
             localStorage.setItem(lastUpdateKey, lastUpdate);
         }
@@ -56,10 +56,14 @@
         window.onload = function() {
             const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
             const lastUpdateFromLocalStorage = localStorage.getItem(lastUpdateKey);
-            const contentFromDb = '<?php echo $result ? addslashes($result['json']) : ''; ?>'; // addslashes to escape any single quotes in the JSON string
+            const contentFromDb = '<?php echo $textToDisplay; ?>'; // addslashes to escape any single quotes in the JSON string
+            console.log('<?php echo json_encode($result) ?>');
 
-            if (lastUpdateFromDb && (lastUpdateFromDb !== lastUpdateFromLocalStorage)) {
+
+            if (lastUpdateFromDb && new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage)) {
                 console.log('Loading content from DB')
+                console.log('Last update from DB:', lastUpdateFromDb)
+                console.log('Last update from localStorage:', lastUpdateFromLocalStorage)
                 // If last_update from DB is different than what's in localStorage, use DB data and update localStorage
                 document.getElementById('textEditor').value = contentFromDb;
                 saveToLocalStorage(contentFromDb, lastUpdateFromDb);

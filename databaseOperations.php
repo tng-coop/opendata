@@ -8,26 +8,28 @@ function fetchOpDataCount() {
     $stmt = $pdo->query($sql); // For a simple, parameter-less query, query() is sufficient
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-// Function to fetch JSON data and last update time for a given UUID
 function fetchJsonForUuid($uuid) {
     $databaseConnector = new DatabaseConnector();
     $pdo = $databaseConnector->getConnection();
     
-    // Prepare a SQL statement to prevent SQL injection
-    // Select both json and last_update columns
     $sql = 'SELECT json, last_update FROM opendata WHERE id = :uuid;';
     $stmt = $pdo->prepare($sql);
     
-    // Bind the UUID parameter
     $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
     
-    // Execute the query
     $stmt->execute();
     
-    // Fetch the result
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Check if result is not false and has a json key
+    if ($result && isset($result['json'])) {
+        // Decode the JSON data
+        $result['json'] = json_decode($result['json'], true);
+    }
+    
     return $result;
 }
+
 
 function insertOpDataWithUuid($uuid) {
     $databaseConnector = new DatabaseConnector();
@@ -92,10 +94,7 @@ function appendOpDataWithUuid($uuid, $newData)
 }
 
 
-function getLastElementText($jsonString) {
-    // Decode the JSON string into an array
-    $dataArray = json_decode($jsonString, true);
-    
+function getLastElementText($dataArray) {
     // Check if the array is empty
     if (empty($dataArray)) {
         error_log("The JSON array is empty.");
