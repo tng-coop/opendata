@@ -1,4 +1,5 @@
 <?php
+require 'loadAppConfig.php';
 
 class DatabaseConnector {
     private $dsn;
@@ -14,11 +15,7 @@ class DatabaseConnector {
     public function __construct() {
         // Adjusted the path for app.json assuming it's at the project root
         $configPath = __DIR__ . '/app.json'; 
-        $config = json_decode(file_get_contents($configPath), true);
-        
-        if (!$config) {
-            throw new Exception("Configuration file not found or invalid JSON.");
-        }
+        $config = loadAppConfig();
 
         // Ensure that the 'database' key exists and has required sub-keys
         if (!isset($config['database']) || !isset($config['database']['pass'])) {
