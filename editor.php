@@ -49,7 +49,7 @@
     </form>
     <!-- Go to Top Link -->
     <div style="text-align: center; margin-top: 20px;">
-        <a href="./" style="text-decoration: none; font-size: 16px;">Go to Top</a>
+        <a href="./../" style="text-decoration: none; font-size: 16px;">Go to Top</a>
     </div>
 
 
