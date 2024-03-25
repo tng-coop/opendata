@@ -1,5 +1,5 @@
 <?php
 require 'vendor/autoload.php';
-session_start();
+// session_start();
 require_once 'ExceptionHandler.php';
 set_exception_handler('myExceptionHandler');

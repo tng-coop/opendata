@@ -16,6 +16,6 @@ function generateAndRedirect($scriptPathDir) {
 }
 
 
-function displayUUIDFromUrl($uuidFromUrl) {
+function showEditor($uuidFromUrl) {
     echo "UUID from URL: " . htmlspecialchars($uuidFromUrl) . "<br>";
 }
