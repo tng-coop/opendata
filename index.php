@@ -31,7 +31,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_uuid'])) {
     exit;
 }
 
-// Default case: fetch operation data count, encode to JSON, and include the form
-$data = fetchOpDataCount(); // Let global exception handler manage any errors.
-echo json_encode($data);
-include 'form.php';
+// Handle UUID generation and redirect if the request method is POST and generate_uuid is set
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goto_uuid'])) {
+    $uuid = $_SESSION['generated_uuid'] ;
+    if (!Uuid::isValid($uuid)) {
+        throw new Exception("Invalid UUID format.");
+    }
+    $redirectPath = rtrim($scriptPathDir, '/') . '/uuid/' . $uuid;
+    header('Location: ' . $redirectPath);
+    exit;
+}
+
+/// if session uuid exists
+if (isset($_SESSION['currentDataUuid']) && !empty($_SESSION['currentDataUuid'])) {
+    $uuidFromSession = htmlspecialchars($_SESSION['currentDataUuid']);
+?>
+    <form method="post">
+        <input type="submit" name="goto_uuid" value="Generate UUID22">
+    </form>
+<?php
+} else {
+    $data = fetchOpDataCount(); // Let global exception handler manage any errors.
+    echo json_encode($data);
+?>
+    <form method="post">
+        <input type="submit" name="generate_uuid" value="Generate UUID">
+    </form>
+<?php
+}
