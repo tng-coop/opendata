@@ -43,3 +43,20 @@ function insertOpDataWithUuid($uuid) {
     // Execute the query
     $stmt->execute();
 }
+
+
+function getLastElementText($jsonString) {
+    // Decode the JSON string into an array
+    $dataArray = json_decode($jsonString, true);
+    
+    // Check if the array is empty
+    if (empty($dataArray)) {
+        return "";
+    }
+    
+    // Get the last element of the array
+    $lastElement = end($dataArray);
+    
+    // Check if the "text" key exists and return its value, otherwise return an empty string
+    return isset($lastElement["text"]) ? $lastElement["text"] : "";
+}
