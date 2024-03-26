@@ -192,12 +192,6 @@
                 }
             }
 
-            // Function to Log Information
-            // function logInformation(currentHash, originalHash, editorContent, contentFromDb) {
-            //     console.log("currentHash: " + currentHash + " originalHash: " + originalHash);
-            //     console.log("current content: " + JSON.stringify(editorContent) + " original content: " + JSON.stringify(contentFromDb));
-            // }
-
             // Function to Save Content to Local Storage
             function saveEditorContentToLocalStorage(uuidFromSession, editorContent, lastUpdate) {
                 saveToLocalStorage(uuidFromSession, editorContent, lastUpdate);
