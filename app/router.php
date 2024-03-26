@@ -2,14 +2,22 @@
 
 use Ramsey\Uuid\Uuid;
 
+function goToTop()
+{
+    global $appConfig;
+    header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
+    exit;
+}
+
 $validTime = time() + (365 * 24 * 60 * 60);
 // Check if the URI contains a UUID
 if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
-    $uuidString = $matches[1]; // Extract the UUID string from the matches
-    if (!Uuid::isValid($uuidString)) {
-        throw new Exception("Invalid UUID format.");
+    $uuid = $matches[1]; // Extract the UUID string from the matches
+    if (!Uuid::isValid($uuid)) {
+        $_SESSION['error'] = 'Invalid UUID format.';
+        gotoTop();
     }
-    $sanitizedUuid = htmlspecialchars($uuidString); // Sanitize the UUID
+    $sanitizedUuid = htmlspecialchars($uuid); // Sanitize the UUID
     $_SESSION['currentDataUuid'] = $sanitizedUuid;
     require 'editor.php'; // Include the editor script and then exit the script
     exit;
@@ -25,12 +33,18 @@ if ($method === 'POST' && isset($_POST['generate_uuid'])) {
     header('Location: ' . $redirectPath);
     exit;
 }
-
 // Handle UUID generation and redirect if the request method is POST and goto_uuid is set
 if ($method === 'POST' && isset($_POST['goto_uuid'])) {
     $uuid = trim($_POST['uuid']);
+
+    // if uuid is blank, go to top
+    if (empty($uuid)) {
+        $_SESSION['error'] = 'UUID was blank.';
+        goToTop();
+    }
     if (!Uuid::isValid($uuid)) {
-        throw new Exception("Invalid UUID format.");
+        $_SESSION['error'] = 'Invalid UUID format.';
+        goToTop();
     }
     // Check if a cookie named 'persistent_uuid' is not set and set it with the current UUID
     if (!isset($_COOKIE['persistent_uuid'])) {
@@ -61,7 +75,6 @@ if ($method === 'POST' && isset($_POST['forget_uuid'])) {
     exit;
 }
 // at this point, if uri is not / , redirect to / to keep it clean
-if ($uri !== $appConfig->get('url.root')) {
-    header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
-    exit;
+if ($uri !== '/') {
+    goToTop();
 }
