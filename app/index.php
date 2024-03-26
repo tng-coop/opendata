@@ -21,7 +21,6 @@
 
     // Check if the URI contains a UUID
     if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
-        echo $uri;
         $uuidString = $matches[1]; // Extract the UUID string from the matches
         if (!Uuid::isValid($uuidString)) {
             throw new Exception("Invalid UUID format.");
