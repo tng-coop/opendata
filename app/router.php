@@ -60,9 +60,8 @@ if ($method === 'POST' && isset($_POST['forget_uuid'])) {
     header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
     exit;
 }
-echo $uri;
-// // at this point, if uri is not / , redirect to / to keep it clean
-// if ($uri !== '/') {
-//     header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
-//     exit;
-// }
+// at this point, if uri is not / , redirect to / to keep it clean
+if ($uri !== '/') {
+    header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
+    exit;
+}
