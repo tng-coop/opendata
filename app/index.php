@@ -15,15 +15,13 @@
 
     use Ramsey\Uuid\Uuid;
 
-    $uri = trim($_SERVER['REQUEST_URI'], '/');
+    $uri = $_SERVER['REQUEST_URI'];
     $method = $_SERVER['REQUEST_METHOD'];
-    echo "URI: " . $uri . "<br>";
-    echo "Method: " . $method . "<br>";
-    exit;
 
 
     // Check if the URI contains a UUID
     if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
+        echo $uri;
         $uuidString = $matches[1]; // Extract the UUID string from the matches
         if (!Uuid::isValid($uuidString)) {
             throw new Exception("Invalid UUID format.");
@@ -35,7 +33,7 @@
     }
 
     // Handle UUID generation and redirect if the request method is POST and generate_uuid is set
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_uuid'])) {
+    if ($method === 'POST' && isset($_POST['generate_uuid'])) {
         $uuid4 = Uuid::uuid4();
         $_SESSION['generated_uuid'] = $uuid4->toString();
         insertOpDataWithUuid($uuid4);
@@ -46,16 +44,10 @@
     }
 
     // Handle UUID generation and redirect if the request method is POST and goto_uuid is set
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goto_uuid'])) {
+    if ($method === 'POST' && isset($_POST['goto_uuid'])) {
         $uuid = trim($_POST['uuid']);
         if (!Uuid::isValid($uuid)) {
-            // Instead of throwing an exception, set an error message in a session variable
-            $_SESSION['error'] = "Invalid UUID format.";
-
-            // Specify the location to redirect to, e.g., an error page or form page
-            $redirectPath = $appConfig->get('url.base') . 'errorPage'; // Adjust 'errorPage' as needed
-            header('Location: ' . $redirectPath);
-            exit;
+            throw new Exception("Invalid UUID format.");
         }
         // Check if a cookie named 'persistent_uuid' is not set and set it with the current UUID
         if (!isset($_COOKIE['persistent_uuid'])) {
@@ -69,7 +61,7 @@
         exit;
     }
     // Handle UUID generation and redirect if the request method is POST and generate_uuid is set
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['forget_uuid'])) {
+    if ($method === 'POST' && isset($_POST['forget_uuid'])) {
         // Clear session data
         session_unset();
 
