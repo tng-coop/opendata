@@ -8,7 +8,7 @@
             // console.log('Saving content to localStorage');
             localStorage.setItem(localStorageKey, content);
             localStorage.setItem(lastUpdateKey, JSON.stringify({
-                [uuid]: lastUpdate
+                ['<?php echo $uuid ?>']: lastUpdate
             }));
         }
 
@@ -31,9 +31,11 @@
         window.onload = function() {
             // Retrieving the last update date from the database or an empty string if not available
             const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
+            console.log('<?php echo $uuid ?>');
+            console.log(localStorage.getItem(lastUpdateKey))
 
             // Accessing local storage to retrieve the last update date for the specific UUID
-            const lastUpdateFromLocalStorage = JSON.parse(localStorage.getItem(lastUpdateKey))?.['<?php echo $uuidFromSession ?>'];
+            const lastUpdateFromLocalStorage = JSON.parse(localStorage.getItem(lastUpdateKey))?.['<?php echo $uuid ?>'];
 
             // Decoding the base64-encoded content from the database for display
             const contentFromDb = base64DecodeUtf8('<?php echo base64_encode($textToDisplay); ?>');
