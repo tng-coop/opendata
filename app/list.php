@@ -2,6 +2,7 @@
 // Displaying the latest BBS entries in an Excel-like table
 function displayLatestBBSTable()
 {
+    global $appConfig;
     $latestBBS = fetchLatestBBS();
     if (!empty($latestBBS)) {
         echo "<h2>Latest BBS Entries</h2>";
@@ -19,7 +20,9 @@ function displayLatestBBSTable()
             echo "<td>" . htmlspecialchars($entry['name'] ?? '') . "</td>";
             echo "<td>" . htmlspecialchars($entry['district'] ?? '') . "</td>";
             echo "<td>" . htmlspecialchars($entry['last_element'] ?? '') . "</td>";
-            echo "<td>" . htmlspecialchars($entry['id'] ?? '') . "</td>";
+            echo "<td><a href='" . htmlspecialchars($appConfig->get('url.root')) . "uuid/" . htmlspecialchars($entry['id'] ?? '') . "'>" . htmlspecialchars($entry['id'] ?? '') . "</a></td>";
+
+
             echo "<td>" . htmlspecialchars($entry['formatted_last_update'] ?? '') . "</td>";
             echo "</tr>";
         }
