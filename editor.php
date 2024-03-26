@@ -92,7 +92,7 @@
         let originalHash = ''; // Initialize variable to store the original hash of the content
 
         function saveToLocalStorage(uuid, content, lastUpdate) {
-            console.log('Saving content to localStorage');
+            // console.log('Saving content to localStorage');
             localStorage.setItem(localStorageKey, content);
             localStorage.setItem(lastUpdateKey, JSON.stringify({
                 [uuid]: lastUpdate
@@ -138,14 +138,8 @@
             // Hide the text editor initially
             textEditor.style.display = 'none';
 
-            // Define a utility function to set the value of the textEditor and update the hash
-            function setTextEditorValue(value) {
-                textEditor.value = value;
-                console.log(textEditor.value)
-            }
-
             // Load initial content from the database
-            setTextEditorValue(contentFromDb);
+            textEditor.value = contentFromDb;
             originalHash = simpleHash(textEditor.value); // Update the hash based on the current value
 
             // Determine if the local storage needs to be updated or is used for loading content
@@ -160,12 +154,12 @@
             else if (lastUpdateFromLocalStorage) {
                 const savedContent = localStorage.getItem(localStorageKey);
                 if (savedContent) {
-                    setTextEditorValue(savedContent);
+                    textEditor.value = savedContent;
                 }
             }
 
             // Show the element after the assignment
-            document.getElementById('textEditor').style.display = ''; // Use 'block', 'inline', etc., if the element had a specific display style initially
+            textEditor.style.display = ''; // Use 'block', 'inline', etc., if the element had a specific display style initially
 
             // Function to Update Indicator
             function updateIndicator() {
