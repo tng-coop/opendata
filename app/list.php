@@ -9,7 +9,8 @@ function displayLatestBBSTable()
         echo "<tr>";
         echo "<th>Name</th>";
         echo "<th>District</th>";
-        echo "<th>Last Element Text</th>";
+        echo "<th>Text</th>";
+        echo "<th>ID</th>";
         echo "<th>Last Update</th>";
         echo "</tr>";
 
@@ -18,7 +19,8 @@ function displayLatestBBSTable()
             echo "<td>" . htmlspecialchars($entry['name'] ?? '') . "</td>";
             echo "<td>" . htmlspecialchars($entry['district'] ?? '') . "</td>";
             echo "<td>" . htmlspecialchars($entry['last_element'] ?? '') . "</td>";
-            echo "<td>" . htmlspecialchars($entry['last_update'] ?? '') . "</td>";
+            echo "<td>" . htmlspecialchars($entry['id'] ?? '') . "</td>";
+            echo "<td>" . htmlspecialchars($entry['formatted_last_update'] ?? '') . "</td>";
             echo "</tr>";
         }
         echo "</table>";

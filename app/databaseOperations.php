@@ -40,7 +40,9 @@ function fetchLatestBBS()
     // Using PostgreSQL syntax for JSON data manipulation
     $sql = "SELECT (json->(json_array_length(json) - 1))->>'name' AS name ,
                    (json->(json_array_length(json) - 1))->>'district' AS district ,
-            last_update, (json->(json_array_length(json) - 1))->>'text' AS last_element
+                   to_char(last_update, 'Mon DD, YYYY HH24:MI') AS formatted_last_update,
+                    (json->(json_array_length(json) - 1))->>'text' AS last_element,
+                    id
             FROM opendata
             ORDER BY last_update DESC;";
 
