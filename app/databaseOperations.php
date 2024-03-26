@@ -1,41 +1,46 @@
 <?php
 require 'DatabaseConnector.php';
 
-function fetchOpDataCount() {
+function fetchOpDataCount()
+{
     $databaseConnector = new DatabaseConnector();
     $pdo = $databaseConnector->getConnection();
     $sql = 'SELECT count(*) FROM opendata;';
     $stmt = $pdo->query($sql); // For a simple, parameter-less query, query() is sufficient
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-function fetchJsonForUuid($uuid) {
+function fetchJsonForUuid($uuid)
+{
     $databaseConnector = new DatabaseConnector();
     $pdo = $databaseConnector->getConnection();
-    
+
     $sql = 'SELECT json, last_update FROM opendata WHERE id = :uuid;';
     $stmt = $pdo->prepare($sql);
-    
+
     $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
-    
+
     $stmt->execute();
-    
+
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     // Check if result is not false and has a json key
     if ($result && isset($result['json'])) {
         // Decode the JSON data
         $result['json'] = json_decode($result['json'], true);
     }
-    
+
     return $result;
 }
-function fetchLatestBBS() {
+function fetchLatestBBS()
+{
     $databaseConnector = new DatabaseConnector();
     $pdo = $databaseConnector->getConnection();
 
     // Corrected SQL query to select id, last_update, and the text of the last element in the JSON array
     // Using PostgreSQL syntax for JSON data manipulation
-    $sql = "SELECT id, last_update, (json->(json_array_length(json) - 1))->>'text' AS last_element
+    $sql = "SELECT (json->(json_array_length(json) - 1))->>'name' AS name ,
+                   (json->(json_array_length(json) - 1))->>'district' AS district ,
+            last_update, (json->(json_array_length(json) - 1))->>'text' AS last_element
             FROM opendata
             ORDER BY last_update DESC;";
 
@@ -46,17 +51,18 @@ function fetchLatestBBS() {
 
 
 
-function insertOpDataWithUuid($uuid) {
+function insertOpDataWithUuid($uuid)
+{
     $databaseConnector = new DatabaseConnector();
     $pdo = $databaseConnector->getConnection();
-    
+
     // Prepare a SQL statement to prevent SQL injection
     $sql = 'INSERT INTO opendata (id) VALUES (:uuid);';
     $stmt = $pdo->prepare($sql);
-    
+
     // Bind the UUID parameter
     $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
-    
+
     // Execute the query
     $stmt->execute();
 }
@@ -109,16 +115,16 @@ function appendOpDataWithUuid($uuid, $newData)
 }
 
 
-function getLastElementText($dataArray) {
+function getLastElement($dataArray, $what)
+{
     // Check if the array is empty
     if (empty($dataArray)) {
         return "";
     }
     // Get the last element of the array
     $lastElement = end($dataArray);
-    
-    // Check if the "text" key exists and return its value, otherwise return an empty string
-    $txt= isset($lastElement["text"]) ? $lastElement["text"] : "";
-    return $txt;
 
+    // Check if the "text" key exists and return its value, otherwise return an empty string
+    $txt = isset($lastElement[$what]) ? $lastElement[$what] : "";
+    return $txt;
 }

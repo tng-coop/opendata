@@ -7,16 +7,18 @@ function displayLatestBBSTable()
         echo "<h2>Latest BBS Entries</h2>";
         echo "<table border='1' style='width: 100%; border-collapse: collapse;'>";
         echo "<tr>";
-        echo "<th>ID</th>";
-        echo "<th>Last Update</th>";
+        echo "<th>Name</th>";
+        echo "<th>District</th>";
         echo "<th>Last Element Text</th>";
+        echo "<th>Last Update</th>";
         echo "</tr>";
 
         foreach ($latestBBS as $entry) {
             echo "<tr>";
-            echo "<td>" . htmlspecialchars($entry['id'] ?? '') . "</td>";
-            echo "<td>" . htmlspecialchars($entry['last_update'] ?? '') . "</td>";
+            echo "<td>" . htmlspecialchars($entry['name'] ?? '') . "</td>";
+            echo "<td>" . htmlspecialchars($entry['district'] ?? '') . "</td>";
             echo "<td>" . htmlspecialchars($entry['last_element'] ?? '') . "</td>";
+            echo "<td>" . htmlspecialchars($entry['last_update'] ?? '') . "</td>";
             echo "</tr>";
         }
         echo "</table>";

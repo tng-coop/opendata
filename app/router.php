@@ -18,7 +18,7 @@ if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
         gotoTop();
     }
     $uuid = htmlspecialchars($uuid); // Sanitize the UUID
-    require 'editor.php'; // Include the editor script and then exit the script
+    require 'mypage.php'; // Include the editor script and then exit the script
     exit;
 }
 
