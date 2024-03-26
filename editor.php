@@ -148,13 +148,16 @@
             setTextEditorValue(contentFromDb);
             originalHash = simpleHash(textEditor.value); // Update the hash based on the current value
 
-            // Determine if the local storage needs to be updated or used for loading content
-            if (lastUpdateFromLocalStorage && (new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage))) {
-                console.log('Updating localStorage');
-                // No need to call setTextEditorValue(contentFromDb); since it's already set above
+            // Determine if the local storage needs to be updated or is used for loading content
+            const lastUpdateFromLocalStorageDate = lastUpdateFromLocalStorage ? new Date(lastUpdateFromLocalStorage) : null;
+            const lastUpdateFromDbDate = new Date(lastUpdateFromDb);
+
+            // Check if local storage should be updated
+            if (lastUpdateFromDbDate > lastUpdateFromLocalStorageDate) {
                 saveToLocalStorage('<?php echo $uuidFromSession ?>', contentFromDb, lastUpdateFromDb);
-            } else if (lastUpdateFromLocalStorage) {
-                console.log('Loading from localStorage');
+            }
+            // Check if content should be loaded from local storage
+            else if (lastUpdateFromLocalStorage) {
                 const savedContent = localStorage.getItem(localStorageKey);
                 if (savedContent) {
                     setTextEditorValue(savedContent);
@@ -164,51 +167,24 @@
             // Show the element after the assignment
             document.getElementById('textEditor').style.display = ''; // Use 'block', 'inline', etc., if the element had a specific display style initially
 
-
-            // Function to Get Editor Content and Calculate Hash
-            function getEditorContentAndHash() {
-                const editorContent = textEditor.value;
-                const currentHash = simpleHash(editorContent);
-                return {
-                    editorContent,
-                    currentHash
-                };
-            }
-
             // Function to Update Indicator
             function updateIndicator() {
-                const {
-                    editorContent,
-                    currentHash
-                } = getEditorContentAndHash();
-                if (originalHash !== currentHash) {
-                    // If the hash has changed, update the indicator to red
-                    indicatorCircle.setAttribute('fill', 'red');
-                    indicatorText.textContent = 'Unsaved changes';
-                } else {
+                if (originalHash === simpleHash(textEditor.value)) {
                     // If the content is unchanged, keep or reset the indicator to green
                     indicatorCircle.setAttribute('fill', 'green');
                     indicatorText.textContent = 'No changes';
+                } else {
+                    // If the hash has changed, update the indicator to red
+                    indicatorCircle.setAttribute('fill', 'red');
+                    indicatorText.textContent = 'Unsaved changes';
                 }
             }
 
-            // Function to Save Content to Local Storage
-            function saveEditorContentToLocalStorage(uuidFromSession, editorContent, lastUpdate) {
-                saveToLocalStorage(uuidFromSession, editorContent, lastUpdate);
-            }
-
-            // updateIndicator(currentHash, originalHash);
             updateIndicator();
             // Set Interval Call
             setInterval(function() {
-                const {
-                    editorContent,
-                    currentHash
-                } = getEditorContentAndHash();
-
                 updateIndicator();
-                // logInformation(currentHash, originalHash, editorContent, contentFromDb);
-                saveEditorContentToLocalStorage('<?php echo $uuidFromSession ?>', editorContent, lastUpdateFromDb);
+                saveToLocalStorage('<?php echo $uuidFromSession ?>', textEditor.value, lastUpdateFromDb);
             }, 3000);
 
         };
