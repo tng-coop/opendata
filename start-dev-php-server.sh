@@ -24,7 +24,7 @@ if lsof -n -i :"$php_server_port" > /dev/null; then
 fi
 
 # Start PHP server and redirect stdout and stderr to log files
-php -S "$php_server_ip":"$php_server_port" index.php > "$log_file" 2> "$error_log_file" &
+php -S "$php_server_ip":"$php_server_port" app/index.php > "$log_file" 2> "$error_log_file" &
 php_server_pid=$!
 echo $php_server_pid > "$pid_file"
 echo "PHP server started on port $php_server_port with PID $php_server_pid."

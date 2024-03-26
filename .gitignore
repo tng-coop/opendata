@@ -3,7 +3,7 @@ node_modules
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-/vendor
+app/vendor
 php_server_*
 custom_error*
 app.json
