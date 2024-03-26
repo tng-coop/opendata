@@ -5,6 +5,8 @@
         "pass": "tng123"
     },
     "url": {
-        "base": "https://tng.coop/opendata/"
+        "base": "https://tng.coop",
+        "root": "/opendata/"
+        
     }
 }

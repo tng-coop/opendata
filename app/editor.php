@@ -47,7 +47,7 @@
 
             // Assuming appendOpDataWithUuid() processes the form submission without errors
             // Construct the redirect path including the UUID
-            $redirectPath = $appConfig->get('url.base') . 'uuid/' . $uuidFromSession; // Construct the redirect URL
+            $redirectPath = $appConfig->get('url.base') . $appConfig->get('url.root') . 'uuid/' . $uuidFromSession; // Construct the redirect URL
 
             // Redirect to the constructed URL to prevent form re-submission on refresh
             header('Location: ' . $redirectPath);

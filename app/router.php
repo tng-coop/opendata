@@ -21,7 +21,7 @@ if ($method === 'POST' && isset($_POST['generate_uuid'])) {
     $_SESSION['generated_uuid'] = $uuid;
     insertOpDataWithUuid($uuid);
     setcookie('persistent_uuid', $uuid, $validTime, '/');
-    $redirectPath = $appConfig->get('url.base') . 'uuid/' . $uuid;
+    $redirectPath = $appConfig->get('url.base') . $appConfig->get('url.root') . 'uuid/' . $uuid;
     header('Location: ' . $redirectPath);
     exit;
 }
@@ -39,7 +39,7 @@ if ($method === 'POST' && isset($_POST['goto_uuid'])) {
         // Note: Modify the expiration time and path as per your requirements
     }
 
-    $redirectPath = $appConfig->get('url.base') . 'uuid/' . $uuid;
+    $redirectPath = $appConfig->get('url.base') . $appConfig->get('url.root') . 'uuid/' . $uuid;
     header('Location: ' . $redirectPath);
     exit;
 }
@@ -57,11 +57,12 @@ if ($method === 'POST' && isset($_POST['forget_uuid'])) {
         setcookie('persistent_uuid', '', time() - 3600, '/');
     }
     // Redirect to the homepage or login page
-    header('Location: ' . $appConfig->get('url.base'));
+    header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
     exit;
 }
-// at this point, if uri is not / , redirect to / to keep it clean
-if ($uri !== '/') {
-    header('Location: ' . $appConfig->get('url.base'));
-    exit;
-}
+echo $uri;
+// // at this point, if uri is not / , redirect to / to keep it clean
+// if ($uri !== '/') {
+//     header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
+//     exit;
+// }
