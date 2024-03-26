@@ -75,6 +75,6 @@ if ($method === 'POST' && isset($_POST['forget_uuid'])) {
     exit;
 }
 // at this point, if uri is not / , redirect to / to keep it clean
-if ($uri !== '/') {
+if ($uri !== $appConfig->get('url.root')) {
     goToTop();
 }
