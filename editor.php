@@ -46,10 +46,8 @@
             appendOpDataWithUuid($uuidFromSession, ['text' => $submittedText]);
 
             // Assuming appendOpDataWithUuid() processes the form submission without errors
-
             // Construct the redirect path including the UUID
-            $scriptPathDir = dirname($_SERVER['PHP_SELF']); // Get the directory of the current script
-            $redirectPath = rtrim($scriptPathDir, '/') . '/uuid/' . $uuidFromSession; // Construct the redirect URL
+            $redirectPath = $appConfig->get('url.base') . 'uuid/' . $uuidFromSession; // Construct the redirect URL
 
             // Redirect to the constructed URL to prevent form re-submission on refresh
             header('Location: ' . $redirectPath);
@@ -118,31 +116,52 @@
         }
 
         window.onload = function() {
+            // Retrieving the last update date from the database or an empty string if not available
             const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
-            const xxx = JSON.parse(localStorage.getItem(lastUpdateKey));
-            const lastUpdateFromLocalStorage = xxx?.['<?php echo $uuidFromSession ?>'];
+
+            // Accessing local storage to retrieve the last update date for the specific UUID
+            const lastUpdateFromLocalStorage = JSON.parse(localStorage.getItem(lastUpdateKey))?.['<?php echo $uuidFromSession ?>'];
+
+            // Decoding the base64-encoded content from the database for display
             const contentFromDb = base64DecodeUtf8('<?php echo base64_encode($textToDisplay); ?>');
+
+            // Selecting the indicator circle element within the SVG in the DOM
             const indicatorCircle = document.querySelector('#indicator svg circle');
+
+            // Getting the indicator text element by its ID
             const indicatorText = document.getElementById('indicatorText');
 
-            // Hide the element before the assignment
-            document.getElementById('textEditor').style.display = 'none';
 
-            document.getElementById('textEditor').value = contentFromDb;
-            originalHash = simpleHash(document.getElementById('textEditor').value); // Compute the original hash when content is loaded
+            // Cache the element for re-use
+            const textEditor = document.getElementById('textEditor');
+
+            // Hide the text editor initially
+            textEditor.style.display = 'none';
+
+            // Define a utility function to set the value of the textEditor and update the hash
+            function setTextEditorValue(value) {
+                textEditor.value = value;
+                originalHash = simpleHash(value); // Update the hash based on the current value
+            }
+
+            // Load initial content from the database
+            setTextEditorValue(contentFromDb);
             console.log(lastUpdateFromDb);
             console.log(lastUpdateFromLocalStorage);
+
+            // Determine if the local storage needs to be updated or used for loading content
             if (lastUpdateFromLocalStorage && (new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage))) {
-                console.log('Updating localStorage')
-                document.getElementById('textEditor').value = contentFromDb;
+                console.log('Updating localStorage');
+                // No need to call setTextEditorValue(contentFromDb); since it's already set above
                 saveToLocalStorage('<?php echo $uuidFromSession ?>', contentFromDb, lastUpdateFromDb);
             } else if (lastUpdateFromLocalStorage) {
-                console.log('Loading from localStorage')
+                console.log('Loading from localStorage');
                 const savedContent = localStorage.getItem(localStorageKey);
                 if (savedContent) {
-                    document.getElementById('textEditor').value = savedContent;
+                    setTextEditorValue(savedContent);
                 }
             }
+
             // Show the element after the assignment
             document.getElementById('textEditor').style.display = ''; // Use 'block', 'inline', etc., if the element had a specific display style initially
 

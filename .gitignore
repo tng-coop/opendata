@@ -6,3 +6,4 @@ node_modules
 /vendor
 php_server_*
 custom_error*
+app.json

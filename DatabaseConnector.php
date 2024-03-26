@@ -1,5 +1,5 @@
 <?php
-require 'loadAppConfig.php';
+require_once 'loadAppConfig.php';
 
 class DatabaseConnector {
     private $dsn;
@@ -14,18 +14,10 @@ class DatabaseConnector {
 
     public function __construct() {
         // Adjusted the path for app.json assuming it's at the project root
-        $configPath = __DIR__ . '/app.json'; 
-        $config = loadAppConfig();
-
-        // Ensure that the 'database' key exists and has required sub-keys
-        if (!isset($config['database']) || !isset($config['database']['pass'])) {
-            throw new Exception("Database configuration is incomplete or missing.");
-        }
-
-        // Assuming the 'host' and 'dbname' are also under the 'database' key in the JSON
-        $this->dsn = sprintf("pgsql:host=%s;dbname=%s", $config['database']['host'], $config['database']['dbname']);
+        global $appConfig;
+        $this->dsn = sprintf("pgsql:host=%s;dbname=%s", $appConfig->get('database.host'), $appConfig->get('database.dbname'));
         $this->user = get_current_user(); // Use the current Unix user
-        $this->pass = $config['database']['pass']; // Use the password from the configuration
+        $this->pass = $appConfig->get('database.pass'); // Use the password from the configuration
     }
 
     public function getConnection() {
