@@ -141,7 +141,7 @@
             // Define a utility function to set the value of the textEditor and update the hash
             function setTextEditorValue(value) {
                 textEditor.value = value;
-                originalHash = simpleHash(value); // Update the hash based on the current value
+                originalHash = simpleHash(textEditor.value); // Update the hash based on the current value
             }
 
             // Load initial content from the database
@@ -168,7 +168,7 @@
 
             // Function to Get Editor Content and Calculate Hash
             function getEditorContentAndHash() {
-                const editorContent = document.getElementById('textEditor').value;
+                const editorContent = textEditor.value;
                 const currentHash = simpleHash(editorContent);
                 return {
                     editorContent,
