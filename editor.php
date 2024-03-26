@@ -141,13 +141,12 @@
             // Define a utility function to set the value of the textEditor and update the hash
             function setTextEditorValue(value) {
                 textEditor.value = value;
-                originalHash = simpleHash(textEditor.value); // Update the hash based on the current value
+                console.log(textEditor.value)
             }
 
             // Load initial content from the database
             setTextEditorValue(contentFromDb);
-            console.log(lastUpdateFromDb);
-            console.log(lastUpdateFromLocalStorage);
+            originalHash = simpleHash(textEditor.value); // Update the hash based on the current value
 
             // Determine if the local storage needs to be updated or used for loading content
             if (lastUpdateFromLocalStorage && (new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage))) {
