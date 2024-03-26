@@ -107,6 +107,8 @@
             const xxx = JSON.parse(localStorage.getItem(lastUpdateKey));
             const lastUpdateFromLocalStorage = xxx?.['<?php echo $uuidFromSession ?>'];
             const contentFromDb = base64DecodeUtf8('<?php echo base64_encode($textToDisplay); ?>');
+            const indicatorCircle = document.querySelector('#indicator svg circle');
+            const indicatorText = document.getElementById('indicatorText');
 
             // Hide the element before the assignment
             document.getElementById('textEditor').style.display = 'none';
@@ -120,7 +122,7 @@
                 document.getElementById('textEditor').value = contentFromDb;
                 saveToLocalStorage('<?php echo $uuidFromSession ?>', contentFromDb, lastUpdateFromDb);
             } else if (lastUpdateFromLocalStorage) {
-                console.log(   'Loading from localStorage'     )
+                console.log('Loading from localStorage')
                 const savedContent = localStorage.getItem(localStorageKey);
                 if (savedContent) {
                     document.getElementById('textEditor').value = savedContent;
@@ -130,13 +132,22 @@
             document.getElementById('textEditor').style.display = ''; // Use 'block', 'inline', etc., if the element had a specific display style initially
 
 
-            setInterval(function() {
+            // Function to Get Editor Content and Calculate Hash
+            function getEditorContentAndHash() {
                 const editorContent = document.getElementById('textEditor').value;
                 const currentHash = simpleHash(editorContent);
-                const indicatorCircle = document.querySelector('#indicator svg circle');
-                const indicatorText = document.getElementById('indicatorText');
-                console.log("currentHash: " + currentHash + " originalHash: " + originalHash);
-                console.log("current content: " + JSON.stringify(editorContent) + " original content: " + JSON.stringify(contentFromDb))
+                return {
+                    editorContent,
+                    currentHash
+                };
+            }
+
+            // Function to Update Indicator
+            function updateIndicator() {
+                const {
+                    editorContent,
+                    currentHash
+                } = getEditorContentAndHash();
                 if (originalHash !== currentHash) {
                     // If the hash has changed, update the indicator to red
                     indicatorCircle.setAttribute('fill', 'red');
@@ -146,8 +157,33 @@
                     indicatorCircle.setAttribute('fill', 'green');
                     indicatorText.textContent = 'No changes';
                 }
-                saveToLocalStorage('<?php echo $uuidFromSession ?>', editorContent, lastUpdateFromDb);
+            }
+
+            // Function to Log Information
+            // function logInformation(currentHash, originalHash, editorContent, contentFromDb) {
+            //     console.log("currentHash: " + currentHash + " originalHash: " + originalHash);
+            //     console.log("current content: " + JSON.stringify(editorContent) + " original content: " + JSON.stringify(contentFromDb));
+            // }
+
+            // Function to Save Content to Local Storage
+            function saveEditorContentToLocalStorage(uuidFromSession, editorContent, lastUpdate) {
+                saveToLocalStorage(uuidFromSession, editorContent, lastUpdate);
+            }
+
+                // updateIndicator(currentHash, originalHash);
+            updateIndicator();
+            // Set Interval Call
+            setInterval(function() {
+                const {
+                    editorContent,
+                    currentHash
+                } = getEditorContentAndHash();
+
+                updateIndicator();
+                // logInformation(currentHash, originalHash, editorContent, contentFromDb);
+                saveEditorContentToLocalStorage('<?php echo $uuidFromSession ?>', editorContent, lastUpdateFromDb);
             }, 3000);
+
         };
     </script>
 
