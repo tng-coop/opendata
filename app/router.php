@@ -17,8 +17,7 @@ if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
         $_SESSION['error'] = 'Invalid UUID format.';
         gotoTop();
     }
-    $sanitizedUuid = htmlspecialchars($uuid); // Sanitize the UUID
-    $_SESSION['currentDataUuid'] = $sanitizedUuid;
+    $uuid = htmlspecialchars($uuid); // Sanitize the UUID
     require 'editor.php'; // Include the editor script and then exit the script
     exit;
 }
