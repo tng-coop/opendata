@@ -44,6 +44,16 @@
             // Retrieve the submitted text content
             $submittedText = $_POST['textEditorContent'] ?? '';
             appendOpDataWithUuid($uuidFromSession, ['text' => $submittedText]);
+        
+            // Assuming appendOpDataWithUuid() processes the form submission without errors
+        
+            // Construct the redirect path including the UUID
+            $scriptPathDir = dirname($_SERVER['PHP_SELF']); // Get the directory of the current script
+            $redirectPath = rtrim($scriptPathDir, '/') . '/uuid/' . $uuidFromSession; // Construct the redirect URL
+            
+            // Redirect to the constructed URL to prevent form re-submission on refresh
+            header('Location: ' . $redirectPath);
+            exit; // Important: stop further script execution
         }
         echo "UUID from URL: " . $uuidFromSession . "<br>";
         // Fetch the initial JSON and last_update using the function
