@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editor Page</title>
     <!-- Add any additional head content here (e.g., CSS links) -->
+    <style>
+        .led-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: gray;
+            position: fixed;
+            /* Or adjust based on your layout */
+            top: 20px;
+            /* Adjust as needed */
+            right: 20px;
+            /* Adjust as needed */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+    </style>
+
+
 </head>
 
 <body>
@@ -20,7 +38,7 @@
             echo "Invalid UUID provided.";
             exit;
         }
-        
+
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Retrieve the submitted text content
@@ -41,26 +59,31 @@
     // Handling form submission is not modified, assuming it's processed server-side as before
     ?>
 
-    <!-- Text Editor Form -->
     <form method="post">
         <label for="textEditor">Text Editor:</label><br>
         <textarea id="textEditor" name="textEditorContent" rows="10" cols="50"></textarea><br>
+        <!-- SVG Indicator -->
+        <div id="indicator" style="margin-bottom: 10px;">
+            <svg width="20" height="20" viewPort="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="10" fill="green" />
+            </svg>
+            <span id="indicatorText" style="vertical-align: super;">No changes</span>
+        </div>
         <input type="submit" value="Submit">
     </form>
-    <!-- Go to Top Link -->
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="./../" style="text-decoration: none; font-size: 16px;">Go to Top</a>
-    </div>
 
 
     <script>
         const localStorageKey = 'textEditorContent';
         const lastUpdateKey = 'lastUpdate';
+        let originalHash = ''; // Initialize variable to store the original hash of the content
 
         function saveToLocalStorage(uuid, content, lastUpdate) {
             console.log('Saving content to localStorage');
             localStorage.setItem(localStorageKey, content);
-            localStorage.setItem(lastUpdateKey, JSON.stringify({[uuid]: lastUpdate}));
+            localStorage.setItem(lastUpdateKey, JSON.stringify({
+                [uuid]: lastUpdate
+            }));
         }
 
         function base64DecodeUtf8(str) {
@@ -68,40 +91,66 @@
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
         }
+
+        function simpleHash(text) {
+            let hash = 0;
+            for (let i = 0; i < text.length; i++) {
+                const character = text.charCodeAt(i);
+                hash = ((hash << 5) - hash) + character;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash;
+        }
+
         window.onload = function() {
             const lastUpdateFromDb = '<?php echo $result ? $result['last_update'] : ''; ?>';
             const xxx = JSON.parse(localStorage.getItem(lastUpdateKey));
-            const lastUpdateFromLocalStorage = xxx?.['<?php echo $uuidFromSession?>'];
+            const lastUpdateFromLocalStorage = xxx?.['<?php echo $uuidFromSession ?>'];
             const contentFromDb = base64DecodeUtf8('<?php echo base64_encode($textToDisplay); ?>');
-            console.log('<?php echo json_encode($result) ?>');
 
-            console.log('Last update from DB:', new Date(lastUpdateFromDb))
-            console.log('Last update from localStorage:', new Date(lastUpdateFromLocalStorage));
-            if (!lastUpdateFromLocalStorage || (new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage))) {
-                console.log('Loading content from DB')
-                console.log('Last update from DB:', lastUpdateFromDb)
-                console.log('Last update from localStorage:', lastUpdateFromLocalStorage)
-                // If last_update from DB is different than what's in localStorage, use DB data and update localStorage
+            // Hide the element before the assignment
+            document.getElementById('textEditor').style.display = 'none';
+
+            document.getElementById('textEditor').value = contentFromDb;
+            originalHash = simpleHash(document.getElementById('textEditor').value); // Compute the original hash when content is loaded
+            console.log(lastUpdateFromDb);
+            console.log(lastUpdateFromLocalStorage);
+            if (lastUpdateFromLocalStorage && (new Date(lastUpdateFromDb) > new Date(lastUpdateFromLocalStorage))) {
+                console.log('Updating localStorage')
                 document.getElementById('textEditor').value = contentFromDb;
-                saveToLocalStorage('<?php echo $uuidFromSession?>', contentFromDb, lastUpdateFromDb);
-            } else if (lastUpdateFromLocalStorage){
-                console.log('Loading content from localStorage')
-                console.log('Last update from DB:', lastUpdateFromDb)
-                console.log('Last update from localStorage:', lastUpdateFromLocalStorage)
-                // Else, load content from localStorage if available
+                saveToLocalStorage('<?php echo $uuidFromSession ?>', contentFromDb, lastUpdateFromDb);
+            } else if (lastUpdateFromLocalStorage) {
+                console.log(   'Loading from localStorage'     )
                 const savedContent = localStorage.getItem(localStorageKey);
                 if (savedContent) {
                     document.getElementById('textEditor').value = savedContent;
                 }
             }
+            // Show the element after the assignment
+            document.getElementById('textEditor').style.display = ''; // Use 'block', 'inline', etc., if the element had a specific display style initially
 
-            // Save the textarea content to localStorage every 5 seconds
+
             setInterval(function() {
                 const editorContent = document.getElementById('textEditor').value;
-                saveToLocalStorage('<?php echo $uuidFromSession?>', editorContent, lastUpdateFromDb);
-            }, 5000);
+                const currentHash = simpleHash(editorContent);
+                const indicatorCircle = document.querySelector('#indicator svg circle');
+                const indicatorText = document.getElementById('indicatorText');
+                console.log("currentHash: " + currentHash + " originalHash: " + originalHash);
+                console.log("current content: " + JSON.stringify(editorContent) + " original content: " + JSON.stringify(contentFromDb))
+                if (originalHash !== currentHash) {
+                    // If the hash has changed, update the indicator to red
+                    indicatorCircle.setAttribute('fill', 'red');
+                    indicatorText.textContent = 'Unsaved changes';
+                } else {
+                    // If the content is unchanged, keep or reset the indicator to green
+                    indicatorCircle.setAttribute('fill', 'green');
+                    indicatorText.textContent = 'No changes';
+                }
+                saveToLocalStorage('<?php echo $uuidFromSession ?>', editorContent, lastUpdateFromDb);
+            }, 3000);
         };
     </script>
+
 </body>
 
 </html>
