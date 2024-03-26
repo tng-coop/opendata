@@ -44,13 +44,13 @@
             // Retrieve the submitted text content
             $submittedText = $_POST['textEditorContent'] ?? '';
             appendOpDataWithUuid($uuidFromSession, ['text' => $submittedText]);
-        
+
             // Assuming appendOpDataWithUuid() processes the form submission without errors
-        
+
             // Construct the redirect path including the UUID
             $scriptPathDir = dirname($_SERVER['PHP_SELF']); // Get the directory of the current script
             $redirectPath = rtrim($scriptPathDir, '/') . '/uuid/' . $uuidFromSession; // Construct the redirect URL
-            
+
             // Redirect to the constructed URL to prevent form re-submission on refresh
             header('Location: ' . $redirectPath);
             exit; // Important: stop further script execution
@@ -80,7 +80,12 @@
             <span id="indicatorText" style="vertical-align: super;">No changes</span>
         </div>
         <input type="submit" value="Submit">
+
     </form>
+    <!-- Go to Top Link -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="./../" style="text-decoration: none; font-size: 16px;">Go to Top</a>
+    </div>
 
 
     <script>
@@ -180,7 +185,7 @@
                 saveToLocalStorage(uuidFromSession, editorContent, lastUpdate);
             }
 
-                // updateIndicator(currentHash, originalHash);
+            // updateIndicator(currentHash, originalHash);
             updateIndicator();
             // Set Interval Call
             setInterval(function() {
