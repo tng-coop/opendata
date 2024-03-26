@@ -10,14 +10,17 @@
 <body>
     <?php
     require_once 'config.php';
-    require_once 'UUIDGenerator.php';
     require_once 'databaseOperations.php';
     customErrorLogger("aaaa");
 
     use Ramsey\Uuid\Uuid;
 
-    $scriptPathDir = dirname($_SERVER['PHP_SELF']);
-    $uri = $_SERVER['REQUEST_URI'];
+    $uri = trim($_SERVER['REQUEST_URI'], '/');
+    $method = $_SERVER['REQUEST_METHOD'];
+    echo "URI: " . $uri . "<br>";
+    echo "Method: " . $method . "<br>";
+    exit;
+
 
     // Check if the URI contains a UUID
     if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
@@ -46,9 +49,14 @@
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['goto_uuid'])) {
         $uuid = trim($_POST['uuid']);
         if (!Uuid::isValid($uuid)) {
-            throw new Exception("Invalid UUID format.");
-        }
+            // Instead of throwing an exception, set an error message in a session variable
+            $_SESSION['error'] = "Invalid UUID format.";
 
+            // Specify the location to redirect to, e.g., an error page or form page
+            $redirectPath = $appConfig->get('url.base') . 'errorPage'; // Adjust 'errorPage' as needed
+            header('Location: ' . $redirectPath);
+            exit;
+        }
         // Check if a cookie named 'persistent_uuid' is not set and set it with the current UUID
         if (!isset($_COOKIE['persistent_uuid'])) {
             // Set the cookie to expire in 1 year (365 days)
@@ -73,7 +81,6 @@
             // empty value and old timestamp
             setcookie('persistent_uuid', '', time() - 3600, '/');
         }
-
         // Redirect to the homepage or login page
         header('Location: ' . $appConfig->get('url.base'));
         exit;
@@ -105,7 +112,7 @@
             <br>
             <input type="text" name="uuid" size="40">
             <br>
-            <input type="submit" name="goto_uuid" value="Go to My ID">
+            <input type="submit" name="goto_uuid" value="Go to Above ID">
         </form>
     <?php
     }
