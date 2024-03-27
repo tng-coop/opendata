@@ -119,16 +119,15 @@ function appendOpDataWithUuid($uuid, $newData)
 
 function getLastElement($dataArray, $what)
 {
-    // Check if the array is empty
-    if (empty($dataArray)) {
-        return "";
+    // if dataarray.what is non-empty, retun lastElemetn.what
+    if (!empty($dataArray) && !empty($dataArray[count($dataArray) - 1][$what])) {
+        return $dataArray[count($dataArray) - 1][$what];
     }
-    // Get the last element of the array
-    $lastElement = end($dataArray);
-
-    // Check if the "text" key exists and return its value, otherwise return an empty string
-    $txt = isset($lastElement[$what]) ? $lastElement[$what] : "";
-    return $txt;
+    // if what is json, return empty array
+    if ($what == 'gps') {
+        return [];
+    }
+    return '';
 }
 
 function fetchValidGpsData()
