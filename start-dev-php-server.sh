@@ -1,6 +1,8 @@
 #!/bin/bash
 # Set script directory
+set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$SCRIPT_DIR"
 php_server_ip=localhost
 php_server_port=8000
 
