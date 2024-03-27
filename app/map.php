@@ -2,9 +2,6 @@
 <?php
 // Use the fetchLatestBBS function to get the data
 $coordinates = fetchValidGpsData();
-print_r($gpsCoordinates);
-echo "<br>";
-print_r($coordinates);
 ?>
 <script>
 // Initialize the map and set its view to our chosen geographical coordinates and a zoom level:
