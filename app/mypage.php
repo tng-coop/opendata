@@ -34,7 +34,21 @@
         $submittedText = $_POST['textEditorContent'] ?? '';
         $submittedName = $_POST['name'] ?? '';
         $submittedDistrict = $_POST['district'] ?? '';
-        appendOpDataWithUuid($uuid, ['text' => $submittedText, 'name' => $submittedName, 'district' => $submittedDistrict]);
+        $submittedLatitude = $_POST['latitude'] ?? '';
+        $submittedLongitude = $_POST['longitude'] ?? '';
+
+        // Combine latitude and longitude into a GPS JSON object
+        $gpsCoordinates = new stdClass(); // Create a standard class object
+        $gpsCoordinates->latitude = $submittedLatitude;
+        $gpsCoordinates->longitude = $submittedLongitude;
+
+        // Now, include the GPS JSON string along with other attributes
+        appendOpDataWithUuid($uuid, [
+            'text' => $submittedText,
+            'name' => $submittedName,
+            'district' => $submittedDistrict,
+            'gps' => $gpsCoordinates // Include the GPS coordinates as a JSON string
+        ]);
 
         // Assuming appendOpDataWithUuid() processes the form submission without errors
         // Construct the redirect path including the UUID
@@ -50,19 +64,24 @@
 
     if ($result && !empty($result['json'])) {
         $textToDisplay = getLastElement($result['json'], 'text'); // Pass the JSON string from the 'json' key to the function
-        $name= getLastElement($result['json'], 'name');
-        $district= getLastElement($result['json'], 'district');
+        $name = getLastElement($result['json'], 'name');
+        $district = getLastElement($result['json'], 'district');
+        $gps = getLastElement($result['json'], 'gps');
+        $longitude=$gps['longitude'];
+        $latitude=$gps['latitude'];
     }
 
     // Handling form submission is not modified, assuming it's processed server-side as before
     ?>
     <?php
     require('editor-script.php');
+    require('streetmap-url-script.php');
     ?>
     <form method="post">
         <?php
         require 'name-input.php';
         require 'district-input.php';
+        require 'streetmap-url-input.php';
         require 'editor.php'; // Include the editor script and then exit the script
         ?>
         <input type="submit" value="Submit">

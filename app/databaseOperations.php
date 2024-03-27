@@ -130,3 +130,28 @@ function getLastElement($dataArray, $what)
     $txt = isset($lastElement[$what]) ? $lastElement[$what] : "";
     return $txt;
 }
+
+function fetchValidGpsData()
+{
+    $databaseConnector = new DatabaseConnector();
+    $pdo = $databaseConnector->getConnection();
+
+    // SQL query to fetch rows with valid GPS coordinates, ordered by the last update
+    $sql = "SELECT 
+                (json->(json_array_length(json) - 1))->>'name' AS name,
+                (json->(json_array_length(json) - 1))->'gps'->>'latitude' AS latitude,
+                (json->(json_array_length(json) - 1))->'gps'->>'longitude' AS longitude
+            FROM 
+                opendata
+            WHERE 
+                (json->(json_array_length(json) - 1))->'gps' IS NOT NULL
+            ORDER BY 
+                last_update DESC;";
+
+    $stmt = $pdo->query($sql); // This is suitable for a simple, parameter-less query
+
+    // Fetch all matching rows
+    $gpsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $gpsData;
+}
