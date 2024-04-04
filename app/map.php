@@ -20,13 +20,10 @@
         $encodedUrl = json_encode($url);
 
         // Use HEREDOC syntax for clarity and to avoid issues with quotes.
-        $jsCode = <<<EOD
-var marker = L.marker([$latitude, $longitude]).addTo(mymap);
-marker.bindPopup('<a href=' + $encodedUrl + ' target="_blank">');
-EOD;
-
-        // Output the JavaScript code.
-        echo $jsCode;
+    ?>
+        var marker = L.marker([<?= $latitude ?>, <?= $longitude; ?>]).addTo(mymap);
+        marker.bindPopup('<a href=' + <?= $encodedUrl; ?> + ' target="_blank">');
+    <?php
         json_encode($coordinate['name']) . " + '</a>');";
     }
     require_once('map-script.js'); ?>
