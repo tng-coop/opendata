@@ -5,7 +5,7 @@
         "pass": "tng123"
     },
     "url": {
-        "base": "http://localhost:8000",
+        "base": "http://10.11.12.122:8000",
         "root": "/"
     }
 }

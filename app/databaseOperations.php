@@ -137,6 +137,7 @@ function fetchValidGpsData()
 
     // SQL query to fetch rows with valid GPS coordinates, ordered by the last update
     $sql = "SELECT 
+                id,
                 (json->(json_array_length(json) - 1))->>'name' AS name,
                 (json->(json_array_length(json) - 1))->'gps'->>'latitude' AS latitude,
                 (json->(json_array_length(json) - 1))->'gps'->>'longitude' AS longitude
