@@ -63,7 +63,7 @@
 
             // Check if local storage should be updated
             if (lastUpdateFromDbDate > lastUpdateFromLocalStorageDate) {
-                saveToLocalStorage('<?php echo $uuidFromSession ?>', contentFromDb, lastUpdateFromDb);
+                saveToLocalStorage('<?php echo $uuid ?>', contentFromDb, lastUpdateFromDb);
             }
             // Check if content should be loaded from local storage
             else if (lastUpdateFromLocalStorage) {
@@ -93,7 +93,7 @@
             // Set Interval Call
             setInterval(function() {
                 updateIndicator();
-                saveToLocalStorage('<?php echo $uuidFromSession ?>', textEditor.value, lastUpdateFromDb);
+                saveToLocalStorage('<?php echo $uuid ?>', textEditor.value, lastUpdateFromDb);
             }, 3000);
 
         };
