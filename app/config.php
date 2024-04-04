@@ -1,4 +1,10 @@
 <?php
+declare(strict_types=1); // Enforce strict type checking
+
+error_reporting(E_ALL); // Report all PHP errors
+ini_set('display_errors', '1'); // Display errors (use '0' for production environments)
+ini_set('log_errors', '1'); // Log errors to the server's error log file
+
 $uri = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 require_once 'loadAppConfig.php';

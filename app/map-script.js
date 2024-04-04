@@ -82,3 +82,22 @@ mymap.on('contextmenu', function (e) {
     // Update or create the placeholder marker at the right-click location
     updateOrCreateMarker(e.latlng);
 });
+function revertToOriginalLatLon() {
+    var latInput = document.getElementById('latitude');
+    var lngInput = document.getElementById('longitude');
+    if (latInput && lngInput) {
+        // Revert to original latitude and longitude
+        latInput.value = latitudeOriginal;
+        lngInput.value = longitudeOriginal;
+    }
+    // Remove the placeholder marker if it exists
+    if (placeholderMarker) {
+        mymap.removeLayer(placeholderMarker);
+        placeholderMarker = null;
+    }
+}
+
+// Add left-click event listener to the map to revert to original lat and lon and remove marker
+mymap.on('click', function () {
+    revertToOriginalLatLon();
+});
