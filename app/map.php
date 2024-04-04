@@ -21,9 +21,9 @@
 
         // Use HEREDOC syntax for clarity and to avoid issues with quotes.
     ?>
-        latitudeOriginal = <?= $latitude ?>;
-        longitudeOriginal = <?= $longitude ?>;
-        var marker = L.marker([<?= $latitude ?>, <?= $longitude; ?>]).addTo(mymap);
+        latitudeOriginal = "<?= $latitude ?>";
+        longitudeOriginal = "<?= $longitude ?>";
+        var marker = L.marker(["<?= $latitude ?>", "<?= $longitude; ?>"]).addTo(mymap);
         marker.bindPopup('<a href="<?= $encodedUrl ?>" target="_blank"><?= $coordinate['name'] ?></a>');
     <?php
         json_encode($coordinate['name']) . " + '</a>');";
