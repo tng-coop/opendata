@@ -75,7 +75,9 @@
     ?>
     <?php
     require('editor-script.php');
+    require('map.php');
     require('streetmap-url-script.php');
+    
     ?>
     <form method="post">
         <?php

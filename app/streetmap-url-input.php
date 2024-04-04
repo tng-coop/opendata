@@ -3,6 +3,3 @@
     
     <label for="longitude">Longitude:</label><br>
     <input type="text" id="longitude" name="longitude" placeholder="Enter longitude" value="<?php echo $longitude ?>"><br>
-    
-    <label for="osmUrl">OpenStreetMap URL (optional):</label><br>
-    <input type="text" id="osmUrl" name="osmUrl" placeholder="Paste OSM URL here" onpaste="extractCoordinatesFromUrl(event)">

@@ -3,7 +3,7 @@
 set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd "$SCRIPT_DIR"
-php_server_ip=localhost
+php_server_ip="0.0.0.0"
 php_server_port=8000
 
 # Define log and PID file paths within the e2e directory
