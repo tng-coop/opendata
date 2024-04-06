@@ -22,6 +22,10 @@
     <p>This project aims to provide open access to data for public use. Our mission is to enhance transparency, promote research, and empower communities through free and open access to data.</p>
 </div>
 
+<!-- Other content of your website goes here -->
+<div>
+    <p>More content below that gets pushed down when the box expands.</p>
+</div>
 
 <script>
     function toggleContent() {
