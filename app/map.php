@@ -13,12 +13,18 @@
 </style>
 <script>
     // Initialize the map and set its view to our chosen geographical coordinates and a zoom level
+    // Function to check if the user is on a smartphone
+    function isSmartphone() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
     var mymap = L.map('mapid', {
         center: [35.1509, 139.1237],
         zoom: 13,
         scrollWheelZoom: false, // Disable scroll wheel zoom by default
-        dragging: false // Start with dragging disabled to allow page scrolling
+        dragging: !isSmartphone() // Disable dragging only for smartphones
     });
+
     latitudeOriginal = "<?= $latitude ?>";
     longitudeOriginal = "<?= $longitude ?>";
     <?php
@@ -26,11 +32,12 @@
     $coordinates = fetchValidGpsData();
     // Loop through the coordinates to place markers
     // Loop through the coordinates to place markers
-    function processCoordinate($coordinate) {
+    function processCoordinate($coordinate)
+    {
         $uuid = $coordinate['id'];
         global $appConfig;
         $url = $appConfig->get('url.base') . $appConfig->get('url.root') . 'uuid/' . $uuid;
-        $la= $coordinate['latitude'];
+        $la = $coordinate['latitude'];
         $lo = $coordinate['longitude'];
         $encodedUrl = json_encode($url);
         echo "var marker = L.marker([\"$la\", \"$lo\"]).addTo(mymap);";

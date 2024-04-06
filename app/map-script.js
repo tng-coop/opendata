@@ -21,6 +21,24 @@ var placeholderMarker = null;
 // Long press implementation
 var longPressTimeout;
 var touchDuration = 800; // Duration required to treat touch as long press (in ms)
+
+// Enable scroll wheel zoom only when SHIFT key is pressed
+function enableScrollZoom(event) {
+    if (event.shiftKey) {
+        mymap.scrollWheelZoom.enable();
+    }
+}
+
+// Disable scroll wheel zoom when SHIFT key is released
+function disableScrollZoom(event) {
+    if (!event.shiftKey) {
+        mymap.scrollWheelZoom.disable();
+    }
+}
+
+// Listen for keydown and keyup events on the entire document
+document.addEventListener('keydown', enableScrollZoom);
+document.addEventListener('keyup', disableScrollZoom);
 function onTouchStart(e) {
     // Start the timer to detect long press
     longPressTimeout = setTimeout(function () {
