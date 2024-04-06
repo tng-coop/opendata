@@ -33,4 +33,4 @@ class AppConfig
     }
 }
 
-$appConfig = new AppConfig(__DIR__ . '/app.json');
+$appConfig = new AppConfig(__DIR__ . '/../app.json');

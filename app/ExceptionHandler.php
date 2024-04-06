@@ -1,7 +1,7 @@
 <?php
 function customErrorLogger($data)
 {
-    $logFilePath = __DIR__ . '/custom_error.log';
+    $logFilePath = __DIR__ . '/../custom_error.log';
 
     // Format the data as a JSON string with pretty print for better readability
     $formattedData = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
