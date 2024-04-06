@@ -14,6 +14,7 @@
     <?php
     require_once('config.php');
     require_once('router.php');
+    require_once('about.php');
     require_once('error.php');
     require_once('goto.php');
     require_once('map.php');
