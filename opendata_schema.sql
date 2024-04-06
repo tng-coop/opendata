@@ -42,7 +42,7 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.opendata (
     id uuid NOT NULL,
-    json json DEFAULT '[]'::json NOT NULL,
+    json jsonb DEFAULT '[]'::json NOT NULL,
     password text,
     email text,
     last_update timestamp with time zone DEFAULT CURRENT_TIMESTAMP
