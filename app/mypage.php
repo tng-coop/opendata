@@ -88,10 +88,11 @@
         ?>
         <input type="submit" value="Submit">
     </form>
-    <!-- Go to Top Link -->
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="./../" style="text-decoration: none; font-size: 16px;">Go to Top</a>
-    </div>
+<!-- Go to Top Link -->
+<div style="text-align: center; margin-top: 40px; margin-bottom: 100px;">
+    <a href="./../" style="text-decoration: none; font-size: 16px;">Go to Top</a>
+</div>
+
 </body>
 
 </html>
