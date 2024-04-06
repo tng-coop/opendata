@@ -38,13 +38,15 @@ function fetchLatestBBS()
 
     // Corrected SQL query to select id, last_update, and the text of the last element in the JSON array
     // Using PostgreSQL syntax for JSON data manipulation
-    $sql = "SELECT (json->(json_array_length(json) - 1))->>'name' AS name ,
-                   (json->(json_array_length(json) - 1))->>'district' AS district ,
-                   to_char(last_update, 'Mon DD, YYYY HH24:MI') AS formatted_last_update,
-                    (json->(json_array_length(json) - 1))->>'text' AS last_element,
-                    id
-            FROM opendata
-            ORDER BY last_update DESC;";
+    $sql = "SELECT 
+    (json->(jsonb_array_length(json) - 1))->>'name' AS name,
+    (json->(jsonb_array_length(json) - 1))->>'district' AS district,
+    to_char(last_update, 'Mon DD, YYYY HH24:MI') AS formatted_last_update,
+    (json->(jsonb_array_length(json) - 1))->>'text' AS last_element,
+    id
+FROM opendata
+ORDER BY last_update DESC;";
+
 
     $stmt = $pdo->query($sql); // For a simple, parameter-less query, query() is sufficient
 
@@ -135,16 +137,16 @@ function fetchValidGpsData()
     $databaseConnector = new DatabaseConnector();
     $pdo = $databaseConnector->getConnection();
 
-    // SQL query to fetch rows with valid GPS coordinates, ordered by the last update
+    // Corrected SQL query for jsonb
     $sql = "SELECT 
                 id,
-                (json->(json_array_length(json) - 1))->>'name' AS name,
-                (json->(json_array_length(json) - 1))->'gps'->>'latitude' AS latitude,
-                (json->(json_array_length(json) - 1))->'gps'->>'longitude' AS longitude
+                (json->(jsonb_array_length(json) - 1))->>'name' AS name,
+                (json->(jsonb_array_length(json) - 1))->'gps'->>'latitude' AS latitude,
+                (json->(jsonb_array_length(json) - 1))->'gps'->>'longitude' AS longitude
             FROM 
                 opendata
             WHERE 
-                (json->(json_array_length(json) - 1))->'gps' IS NOT NULL
+                (json->(jsonb_array_length(json) - 1))->'gps' IS NOT NULL
             ORDER BY 
                 last_update DESC;";
 
