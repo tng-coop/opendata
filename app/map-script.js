@@ -4,6 +4,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(mymap);
 
+
 // Define a custom green icon
 var greenIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
@@ -45,7 +46,6 @@ function onLongPress(e) {
     // Update the input fields with the latitude and longitude values
     document.getElementById('latitude').value = lat;
     document.getElementById('longitude').value = lng;
-
     // Update or create the placeholder marker at the long press location
     updateOrCreateMarker(latlng);
 }
