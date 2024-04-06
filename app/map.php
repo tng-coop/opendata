@@ -40,8 +40,10 @@
         $la = $coordinate['latitude'];
         $lo = $coordinate['longitude'];
         $encodedUrl = json_encode($url);
-        echo "var marker = L.marker([\"$la\", \"$lo\"]).addTo(mymap);";
-        echo "marker.bindPopup('<a href=\"$encodedUrl\" target=\"_blank\">{$coordinate['name']}</a>');";
+        ?>
+        var marker = L.marker([<?= json_encode($la) ?>, <?= json_encode($lo) ?>]).addTo(mymap);
+        marker.bindPopup('<a href=<?= $encodedUrl ?> target="_blank"><?= $coordinate['name'] ?></a>');
+        <?php
     }
     foreach ($coordinates as $coordinate) {
         processCoordinate($coordinate);
