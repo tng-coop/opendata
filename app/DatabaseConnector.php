@@ -1,7 +1,8 @@
 <?php
 require_once 'loadAppConfig.php';
 
-class DatabaseConnector {
+class DatabaseConnector
+{
     private $dsn;
     private $user;
     private $pass;
@@ -12,15 +13,26 @@ class DatabaseConnector {
         PDO::ATTR_EMULATE_PREPARES   => false,
     ];
 
-    public function __construct() {
+    public function __construct()
+    {
         // Adjusted the path for app.json assuming it's at the project root
         global $appConfig;
-        $this->dsn = sprintf("pgsql:host=%s;dbname=%s", $appConfig->get('database.host'), $appConfig->get('database.dbname'));
+        // Retrieve the port from configuration or default to 5432 if not set
+        $databasePort = $appConfig->get('database.port') ? $appConfig->get('database.port') : 5432;
+
+        $this->dsn = sprintf(
+            "pgsql:host=%s;port=%d;dbname=%s",
+            $appConfig->get('database.host'),
+            $databasePort,
+            $appConfig->get('database.dbname')
+        );
+
         $this->user = get_current_user(); // Use the current Unix user
         $this->pass = $appConfig->get('database.pass'); // Use the password from the configuration
     }
 
-    public function getConnection() {
+    public function getConnection()
+    {
         if ($this->pdo === null) {
             try {
                 $this->pdo = new PDO($this->dsn, $this->user, $this->pass, $this->options);

@@ -2,7 +2,8 @@
     "database": {
         "host": "localhost",
         "dbname": "tng",
-        "pass": "tng123"
+        "pass": "tng123",
+        "port": "5532"
     },
     "url": {
         "base": "http://10.11.12.122:8000",
