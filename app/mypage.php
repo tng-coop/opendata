@@ -93,6 +93,9 @@
     <a href="./../" style="text-decoration: none; font-size: 16px;">Go to Top</a>
 </div>
 
+    <!-- Include storage-info.php -->
+    <?php include 'storage-info.php'; ?>
+    <?php include 'gps-info.php'; ?>
 </body>
 
 </html>
