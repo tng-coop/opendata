@@ -1,7 +1,6 @@
 <?php
 
 use Ramsey\Uuid\Uuid;
-
 function goToTop()
 {
     global $appConfig;
@@ -15,6 +14,21 @@ $validTime = time() + (365 * 24 * 60 * 60);
 // Check if the URI is /hello and include hello.php
 if ($uri === $appConfig->get('url.root') . 'umbrella-labels') {
     require 'umbrella-labels.php';
+    exit;
+}
+
+// Check if the URI contains a UUID in the /umb/<uuid> format
+if (preg_match('/\/umb\/([a-f0-9\-]+)$/', $uri, $matches)) {
+    $uuid = $matches[1]; // Extract the UUID string from the matches
+    if (!Uuid::isValid($uuid)) {
+        echo "Invalid UUID format.";
+        exit;
+    }
+    $uuid = htmlspecialchars($uuid); // Sanitize the UUID
+    // Store the UUID in the session
+    $_SESSION['umb-uuid'] = $uuid;
+    $redirectPath = $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb.php';
+    header('Location: ' . $redirectPath);
     exit;
 }
 
@@ -82,7 +96,14 @@ if ($method === 'POST' && isset($_POST['forget_uuid'])) {
     header('Location: ' . $appConfig->get('url.base') . $appConfig->get('url.root'));
     exit;
 }
+// Check if the URI is /umb.php and include umb.php
+if ($uri === $appConfig->get('url.root') . 'umb.php') {
+    require 'umb.php';
+    exit;
+}
+
 // at this point, if uri is not / , redirect to / to keep it clean
 if ($uri !== $appConfig->get('url.root')) {
     goToTop();
 }
+require_once 'frontpage.php';
