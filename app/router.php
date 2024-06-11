@@ -10,6 +10,15 @@ function goToTop()
 }
 
 $validTime = time() + (365 * 24 * 60 * 60);
+
+
+// Check if the URI is /hello and include hello.php
+if ($uri === $appConfig->get('url.root') . 'umbrella-labels') {
+    require 'umbrella-labels.php';
+    exit;
+}
+
+
 // Check if the URI contains a UUID
 if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
     $uuid = $matches[1]; // Extract the UUID string from the matches
