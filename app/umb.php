@@ -6,7 +6,6 @@ $uuid = $_SESSION['umb-uuid'];
 if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
     createEntityIfNotExists($uuid);
     $oldPoints = fetchJsonForUuid($uuid);
-    echo json_encode($oldPoints);
 } else {
     echo "<h1>Invalid or missing UUID</h1>";
     exit;
@@ -27,6 +26,8 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
 <body>
     <div id="mapid"></div>
     <script>
+        const phpData = <?php echo json_encode($oldPoints); ?>;
+        alert(JSON.stringify(phpData, null, 2));
         // Initialize the map and set its view to our chosen geographical coordinates and a zoom level
         // Function to check if the user is on a smartphone
         function isSmartphone() {
@@ -79,6 +80,6 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
 
 
         document.addEventListener('DOMContentLoaded', displayGPSInfo);
-        <?php require_once('map-script.js'); ?>
+        <?php require_once ('map-script.js'); ?>
     </script>
 </body>
