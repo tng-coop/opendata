@@ -10,6 +10,24 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
     echo "<h1>Invalid or missing UUID</h1>";
     exit;
 }
+// Function to process each coordinate
+function processCoordinate($coordinate)
+{
+    $latitude = $coordinate['umb-gps']['latitude'];
+    $longitude = $coordinate['umb-gps']['longitude'];
+    global $appConfig;
+    $baseURL = $appConfig->get('url.base') . $appConfig->get('url.root');
+    $encodedURL = json_encode($baseURL);
+    ?>
+    var marker = L.marker([<?= json_encode($latitude) ?>, <?= json_encode($longitude) ?>]).addTo(mymap);
+    marker.bindPopup('<a href=<?= $encodedURL ?> target="_blank">GPS Coordinate</a>');
+    <?php
+}
+
+// Iterate over the data and process each coordinate
+foreach ($data as $coordinate) {
+    processCoordinate($coordinate);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -80,6 +98,17 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
 
 
         document.addEventListener('DOMContentLoaded', displayGPSInfo);
+
+
+        // Function to add markers from PHP data
+        const addMarkersFromData = () => {
+            phpData.forEach(coordinate => {
+                var marker = L.marker([coordinate['umb-gps']['latitude'], coordinate['umb-gps']['longitude']]).addTo(mymap);
+                marker.bindPopup('<a href="<?php echo json_encode($baseURL); ?>" target="_blank">GPS Coordinate</a>');
+            });
+        };
+
+        document.addEventListener('DOMContentLoaded', addMarkersFromData);        
         <?php require_once ('map-script.js'); ?>
     </script>
 </body>
