@@ -21,9 +21,6 @@
 
     const showPosition = async (position) => {
     const { latitude, longitude } = position.coords;
-    document.getElementById('latitudeGPS').textContent = `Latitude: ${latitude}`;
-    document.getElementById('longitudeGPS').textContent = `Longitude: ${longitude}`;
-
     try {
         // Retrieve the UUID from the PHP session variable
         const baseURL = '<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php'; ?>';
