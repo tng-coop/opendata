@@ -45,23 +45,23 @@
     // $coordinates = fetchValidGpsData();
     // Loop through the coordinates to place markers
     // Loop through the coordinates to place markers
-    function processCoordinate($latitude, $longitude)
-    {
-        $uuid = $_SESSION['umb-uuid'];
-        global $appConfig;
-        $url = $appConfig->get('url.base') . $appConfig->get('url.root') . 'uuid/' . $uuid;
-        $la = $latitude;
-        $lo = $longitude;
-        $encodedUrl = json_encode($url);
-        $name='current'
-        ?>
-        var marker = L.marker([<?= json_encode($la) ?>, <?= json_encode($lo) ?>]).addTo(mymap);
-        marker.bindPopup('<a href=<?= $encodedUrl ?> target="_blank"><?= $name ?></a>');
-        <?php
-    }
-    foreach ($coordinates as $coordinate) {
-        // processCoordinate($coordinate);
-    }
+    // function processCoordinate($latitude, $longitude)
+    // {
+    //     $uuid = $_SESSION['umb-uuid'];
+    //     global $appConfig;
+    //     $url = $appConfig->get('url.base') . $appConfig->get('url.root') . 'uuid/' . $uuid;
+    //     $la = $latitude;
+    //     $lo = $longitude;
+    //     $encodedUrl = json_encode($url);
+    //     $name='current'
+    //     ?>
+    //     var marker = L.marker([<?= json_encode($la) ?>, <?= json_encode($lo) ?>]).addTo(mymap);
+    //     marker.bindPopup('<a href=<?= $encodedUrl ?> target="_blank"><?= $name ?></a>');
+    //     <?php
+    // }
+    // foreach ($coordinates as $coordinate) {
+    //     // processCoordinate($coordinate);
+    // }
     require_once('map-script.js'); ?>
 </script>
 </body>
