@@ -6,7 +6,7 @@ $uuid = $_SESSION['umb-uuid'];
 if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
     createEntityIfNotExists($uuid);
     $oldPoints = fetchJsonForUuid($uuid);
-    echo json_encode($result);
+    echo json_encode($oldPoints);
 } else {
     echo "<h1>Invalid or missing UUID</h1>";
     exit;
