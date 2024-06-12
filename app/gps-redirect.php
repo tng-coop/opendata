@@ -28,7 +28,7 @@
         document.getElementById('longitudeGPS').textContent = `Longitude: ${longitude}`;
 
         try {
-            const response = await fetch('https://tng.coop');
+            const response = await fetch('<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php';?>');
             const data = await response.text();
             document.getElementById('contentBox').value = data;
         } catch (error) {

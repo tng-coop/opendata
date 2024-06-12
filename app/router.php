@@ -33,6 +33,7 @@ if (preg_match('/\/umb\/([a-f0-9\-]+)$/', $uri, $matches)) {
 }
 
 
+
 // Check if the URI contains a UUID
 if (preg_match('/\/uuid\/([a-f0-9\-]+)$/', $uri, $matches)) {
     $uuid = $matches[1]; // Extract the UUID string from the matches
@@ -101,6 +102,12 @@ if ($uri === $appConfig->get('url.root') . 'umb.php') {
     require 'umb.php';
     exit;
 }
+// Check if the URI is /umb.php and include umb.php
+if ($uri === $appConfig->get('url.root') . 'umb-gps.php') {
+    require 'umb-gps.php';
+    exit;
+}
+
 
 // at this point, if uri is not / , redirect to / to keep it clean
 if ($uri !== $appConfig->get('url.root')) {
