@@ -97,12 +97,13 @@ foreach ($data as $coordinate) {
                         L.latLng(35.156233, 139.132804)
                     ],
                     routeWhileDragging: true,
-                    createMarker: function (i, waypoint, n) {
-                        // Only create a marker for the first waypoint (user's current position)
-                        if (i === 0) {
-                            return L.marker(waypoint.latLng);
-                        }
-                    }
+                    createMarker: function () { return null; },  // No markers
+                    lineOptions: {
+                        styles: [{ color: 'blue', opacity: 0.6, weight: 4 }]
+                    },
+                    addWaypoints: false,  // Disable adding waypoints by dragging
+                    fitSelectedRoutes: true,
+                    show: false  // Disable the instructions panel
                 }).addTo(mymap);
             } catch (error) {
                 console.error('Error fetching content:', error);
