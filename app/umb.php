@@ -9,5 +9,58 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
     echo "<h1>Invalid or missing UUID</h1>";
     exit;
 }
-require_once('gps-redirect.php');
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Application's Title</title>
+    <?php
+    require_once ('leaflet.php');
+    ?>
+</head>
+
+<body>
+    <div id="gps-info" style="margin-top: 20px;">
+        <div id="gps-coordinates">
+        </div>
+        <div id="contentBox"></div>
+    </div>
+
+    <script>
+        const displayGPSInfo = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                console.log('Geolocation is not supported by this browser.');
+            }
+        };
+
+        const showPosition = async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+                // Retrieve the UUID from the PHP session variable
+                const baseURL = '<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php'; ?>';
+                const urlWithParams = `${baseURL}?latitude=${latitude}&longitude=${longitude}`;
+
+                // Perform the fetch request with the updated URL
+                const response = await fetch(urlWithParams, {
+                    method: 'GET',
+                });
+                const data = await response.text();
+                document.getElementById('contentBox').innerHTML = data;
+            } catch (error) {
+                console.error('Error fetching content:', error);
+                document.getElementById('contentBox').innerHTML = 'Error fetching content.';
+                // also show error
+                document.getElementById('contentBox').innerHTML += `<p>${error}</p>`;
+            }
+        };
+
+
+        document.addEventListener('DOMContentLoaded', displayGPSInfo);
+    </script>
+</body>
 
