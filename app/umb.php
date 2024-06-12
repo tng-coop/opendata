@@ -90,6 +90,24 @@ foreach ($data as $coordinate) {
                 // Add user's current position marker to the map
                 var userMarker = L.marker([latitude, longitude]).addTo(mymap);
                 userMarker.bindPopup(`Your current position: (${latitude}, ${longitude})`).openPopup();
+                // Use Leaflet Routing Machine to create a route that follows roads
+                L.Routing.control({
+                    waypoints: [
+                        L.latLng(latitude, longitude),
+                        L.latLng(35.156233, 139.132804)
+                    ],
+                    routeWhileDragging: true,
+                    createMarker: function (i, waypoint, n) {
+                        var markerOptions = {};
+                        if (i === n - 1) {
+                            markerOptions.icon = redIcon;
+                        }
+                        return L.marker(waypoint.latLng, markerOptions);
+                    }
+                }).addTo(mymap);
+
+
+
             } catch (error) {
                 console.error('Error fetching content:', error);
                 document.getElementById('contentBox').innerHTML = 'Error fetching content.';
