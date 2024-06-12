@@ -5,6 +5,8 @@ $uuid = $_SESSION['umb-uuid'];
 // Check if the UUID is valid
 if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
     createEntityIfNotExists($uuid);
+    $oldPoints = fetchJsonForUuid($uuid);
+    echo json_encode($result);
 } else {
     echo "<h1>Invalid or missing UUID</h1>";
     exit;
@@ -67,8 +69,6 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
                 });
                 const data = await response.text();
                 document.getElementById('contentBox').innerHTML = data;
-                // Show standard popup box
-                window.alert('Hello');
             } catch (error) {
                 console.error('Error fetching content:', error);
                 document.getElementById('contentBox').innerHTML = 'Error fetching content.';
