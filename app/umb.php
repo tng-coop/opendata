@@ -44,8 +44,7 @@ foreach ($data as $coordinate) {
 <body>
     <div id="mapid"></div>
     <script>
-        const phpData = <?php echo json_encode($oldPoints); ?>;
-        alert(JSON.stringify(phpData, null, 2));
+        const oldPoints = <?php echo json_encode($oldPoints); ?>;
         // Initialize the map and set its view to our chosen geographical coordinates and a zoom level
         // Function to check if the user is on a smartphone
         function isSmartphone() {
@@ -105,7 +104,7 @@ foreach ($data as $coordinate) {
 
         // Function to add markers from PHP data
         const addMarkersFromData = () => {
-            phpData.forEach(coordinate => {
+            oldPoints.forEach(coordinate => {
                 var marker = L.marker([coordinate['umb-gps']['latitude'], coordinate['umb-gps']['longitude']]).addTo(mymap);
                 marker.bindPopup('<a href="<?php echo json_encode($baseURL); ?>" target="_blank">GPS Coordinate</a>');
             });
