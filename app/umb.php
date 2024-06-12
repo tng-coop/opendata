@@ -67,6 +67,8 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
                 });
                 const data = await response.text();
                 document.getElementById('contentBox').innerHTML = data;
+                // Show standard popup box
+                window.alert('Hello');
             } catch (error) {
                 console.error('Error fetching content:', error);
                 document.getElementById('contentBox').innerHTML = 'Error fetching content.';
