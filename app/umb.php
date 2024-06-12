@@ -23,6 +23,7 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
 </head>
 
 <body>
+    <div id="mapid"></div>
     <script>
         // Initialize the map and set its view to our chosen geographical coordinates and a zoom level
         // Function to check if the user is on a smartphone
@@ -38,7 +39,6 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
         });
     </script>
 
-    <div id="mapid"></div>
     <div id="gps-info" style="margin-top: 20px;">
         <div id="gps-coordinates">
         </div>
