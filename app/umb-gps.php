@@ -42,7 +42,7 @@
     $longitude = "<?= $_GET['longitude'] ?>";
     <?php
     // Use the fetchLatestBBS function to get the data
-    $coordinates = fetchValidGpsData();
+    // $coordinates = fetchValidGpsData();
     // Loop through the coordinates to place markers
     // Loop through the coordinates to place markers
     function processCoordinate($latitude, $longitude)
