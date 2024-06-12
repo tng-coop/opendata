@@ -1,8 +1,8 @@
 RewriteEngine On
 
 # Ensure requests for actual files and directories are not rewritten
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
 
 # Rewrite all other URLs to 'index.php'
 RewriteRule ^ index.php [NC,L]
