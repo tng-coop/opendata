@@ -28,7 +28,7 @@
         document.getElementById('longitudeGPS').textContent = `Longitude: ${longitude}`;
 
         try {
-            const response = await fetch('https://microsoft.com');
+            const response = await fetch('https://tng.coop');
             const data = await response.text();
             document.getElementById('contentBox').value = data;
         } catch (error) {
