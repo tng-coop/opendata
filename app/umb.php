@@ -98,16 +98,12 @@ foreach ($data as $coordinate) {
                     ],
                     routeWhileDragging: true,
                     createMarker: function (i, waypoint, n) {
-                        var markerOptions = {};
-                        if (i === n - 1) {
-                            markerOptions.icon = redIcon;
+                        // Only create a marker for the first waypoint (user's current position)
+                        if (i === 0) {
+                            return L.marker(waypoint.latLng);
                         }
-                        return L.marker(waypoint.latLng, markerOptions);
                     }
                 }).addTo(mymap);
-
-
-
             } catch (error) {
                 console.error('Error fetching content:', error);
                 document.getElementById('contentBox').innerHTML = 'Error fetching content.';
