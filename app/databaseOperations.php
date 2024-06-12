@@ -76,6 +76,27 @@ function fetchJsonForUuid($uuid)
 
     return $result2;
 }
+function fetchLatestPointsForUuid($uuid, $n = 20)
+{
+    $databaseConnector = new DatabaseConnector();
+    $pdo = $databaseConnector->getConnection();
+
+    $sql = 'SELECT json FROM opendata WHERE id = :uuid;';
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result && isset($result['json'])) {
+        $data = json_decode($result['json'], true);
+        $data = array_slice($data, -$n); // Get the last n elements
+        return $data;
+    }
+
+    return [];
+}
 function fetchLatestBBS()
 {
     $databaseConnector = new DatabaseConnector();
