@@ -62,11 +62,11 @@
     // Fetch the initial JSON and last_update using the function
     $result = fetchJsonForUuid($uuid);
 
-    if ($result && !empty($result['json'])) {
-        $textToDisplay = getLastElement($result['json'], 'text'); // Pass the JSON string from the 'json' key to the function
-        $name = getLastElement($result['json'], 'name');
-        $district = getLastElement($result['json'], 'district');
-        $gps = getLastElement($result['json'], 'gps');
+    if ($result) {
+        $textToDisplay = getLastElement($result, 'text'); // Pass the JSON string from the 'json' key to the function
+        $name = getLastElement($result, 'name');
+        $district = getLastElement($result, 'district');
+        $gps = getLastElement($result, 'gps');
         $longitude=$gps['longitude'];
         $latitude=$gps['latitude'];
     }
@@ -75,6 +75,7 @@
     ?>
     <?php
     require('editor-script.php');
+    require_once ('leaflet.php');
     require('map.php');
     require('streetmap-url-script.php');
     

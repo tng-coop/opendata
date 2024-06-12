@@ -71,10 +71,10 @@ function fetchJsonForUuid($uuid)
     // Check if result is not false and has a json key
     if ($result && isset($result['json'])) {
         // Decode the JSON data
-        $result['json'] = json_decode($result['json'], true);
+        $result2 = json_decode($result['json'], true);
     }
 
-    return $result;
+    return $result2;
 }
 function fetchLatestBBS()
 {
