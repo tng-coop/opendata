@@ -23,6 +23,20 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
 </head>
 
 <body>
+    <script>
+        // Initialize the map and set its view to our chosen geographical coordinates and a zoom level
+        // Function to check if the user is on a smartphone
+        function isSmartphone() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        var mymap = L.map('mapid', {
+            center: [35.1509, 139.1237],
+            zoom: 13,
+            scrollWheelZoom: false, // Disable scroll wheel zoom by default
+            dragging: !isSmartphone() // Disable dragging only for smartphones
+        });
+    </script>
     <div id="gps-info" style="margin-top: 20px;">
         <div id="gps-coordinates">
         </div>
@@ -63,4 +77,3 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
         document.addEventListener('DOMContentLoaded', displayGPSInfo);
     </script>
 </body>
-
