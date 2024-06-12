@@ -103,11 +103,11 @@ if ($uri === $appConfig->get('url.root') . 'umb.php') {
     exit;
 }
 // Check if the URI is /umb.php and include umb.php
-if ($uri === $appConfig->get('url.root') . 'umb-gps.php') {
+// Check if the URI starts with the base URI and allow for query parameters
+if (strpos($uri,  $appConfig->get('url.root') . 'umb-gps.php') === 0) {
     require 'umb-gps.php';
     exit;
 }
-
 
 // at this point, if uri is not / , redirect to / to keep it clean
 if ($uri !== $appConfig->get('url.root')) {
