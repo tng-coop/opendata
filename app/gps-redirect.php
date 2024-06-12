@@ -34,6 +34,8 @@
         } catch (error) {
             console.error('Error fetching content:', error);
             document.getElementById('contentBox').value = 'Error fetching content.';
+            // also show error
+            document.getElementById('contentBox').value = error;
         }
     };
 
