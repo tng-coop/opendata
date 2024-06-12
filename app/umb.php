@@ -77,5 +77,6 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
 
 
         document.addEventListener('DOMContentLoaded', displayGPSInfo);
+        <?php require_once('map-script.js'); ?>
     </script>
 </body>
