@@ -29,9 +29,8 @@
 
     try {
         // Retrieve the UUID from the PHP session variable
-        const uuid = '<?php echo $_SESSION['umb-uuid']; ?>';
         const baseURL = '<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php'; ?>';
-        const urlWithParams = `${baseURL}?uuid=${uuid}&latitude=${latitude}&longitude=${longitude}`;
+        const urlWithParams = `${baseURL}?latitude=${latitude}&longitude=${longitude}`;
 
         // Perform the fetch request with the updated URL
         const response = await fetch(urlWithParams, {
