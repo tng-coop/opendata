@@ -23,30 +23,30 @@
     };
 
     const showPosition = async (position) => {
-        const { latitude, longitude } = position.coords;
-        document.getElementById('latitudeGPS').textContent = `Latitude: ${latitude}`;
-        document.getElementById('longitudeGPS').textContent = `Longitude: ${longitude}`;
+    const { latitude, longitude } = position.coords;
+    document.getElementById('latitudeGPS').textContent = `Latitude: ${latitude}`;
+    document.getElementById('longitudeGPS').textContent = `Longitude: ${longitude}`;
 
-        try {
-            // Retrieve the UUID from the PHP session variable
-            const uuid = '<?php echo $_SESSION['umb-uuid']; ?>';
-            const baseURL = '<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php'; ?>';
-            const urlWithUUID = `${baseURL}?uuid=${uuid}`;
+    try {
+        // Retrieve the UUID from the PHP session variable
+        const uuid = '<?php echo $_SESSION['umb-uuid']; ?>';
+        const baseURL = '<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php'; ?>';
+        const urlWithParams = `${baseURL}?uuid=${uuid}&latitude=${latitude}&longitude=${longitude}`;
 
-            // Perform the fetch request with the updated URL
-            const response = await fetch(urlWithUUID, {
-                method: 'GET',
-            });
-            const data = await response.text();
-            document.getElementById('contentBox').innerHTML = data;
-        } catch (error) {
-            console.error('Error fetching content:', error);
-            document.getElementById('contentBox').innerHTML = 'Error fetching content.';
-            // also show error
-            document.getElementById('contentBox').innerHTML += `<p>${error}</p>`;
-        }
+        // Perform the fetch request with the updated URL
+        const response = await fetch(urlWithParams, {
+            method: 'GET',
+        });
+        const data = await response.text();
+        document.getElementById('contentBox').innerHTML = data;
+    } catch (error) {
+        console.error('Error fetching content:', error);
+        document.getElementById('contentBox').innerHTML = 'Error fetching content.';
+        // also show error
+        document.getElementById('contentBox').innerHTML += `<p>${error}</p>`;
+    }
+};
 
-    };
 
     document.addEventListener('DOMContentLoaded', displayGPSInfo);
 </script>
