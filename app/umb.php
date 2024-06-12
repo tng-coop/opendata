@@ -108,9 +108,23 @@ foreach ($data as $coordinate) {
                 var marker = L.marker([coordinate['umb-gps']['latitude'], coordinate['umb-gps']['longitude']]).addTo(mymap);
                 marker.bindPopup('<a href="<?php echo json_encode($baseURL); ?>" target="_blank">GPS Coordinate</a>');
             });
+
+            // Define a custom red icon
+            var redIcon = new L.Icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+
+            // Adding a specific marker with the red icon
+            var specificMarker = L.marker([35.156233, 139.132804], { icon: redIcon }).addTo(mymap);
+            specificMarker.bindPopup('Return Umbrella Here!');
         };
 
-        document.addEventListener('DOMContentLoaded', addMarkersFromData);        
+        document.addEventListener('DOMContentLoaded', addMarkersFromData);
         <?php require_once ('map-script.js'); ?>
     </script>
 </body>
