@@ -89,8 +89,8 @@ foreach ($data as $coordinate) {
                 const data = await response.text();
                 document.getElementById('contentBox').innerHTML = data;
                 // Add user's current position marker to the map
-                // var userMarker = L.marker([latitude, longitude]).addTo(mymap);
-                // userMarker.bindPopup(`Your current position: (${latitude}, ${longitude})`).openPopup();
+                var userMarker = L.marker([latitude, longitude]).addTo(mymap);
+                userMarker.bindPopup(`Your current position: (${latitude}, ${longitude})`).openPopup();
             } catch (error) {
                 console.error('Error fetching content:', error);
                 document.getElementById('contentBox').innerHTML = 'Error fetching content.';
