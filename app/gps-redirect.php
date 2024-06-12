@@ -1,6 +1,5 @@
 <!-- gps-info.php -->
 <div id="gps-info" style="margin-top: 20px;">
-    <h2>GPS Information</h2>
     <div id="gps-coordinates">
     </div>
     <div id="contentBox"></div>
@@ -11,8 +10,7 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
         } else {
-            document.getElementById('latitudeGPS').textContent = "Geolocation is not supported by this browser.";
-            document.getElementById('longitudeGPS').textContent = "";
+            console.log('Geolocation is not supported by this browser.');
         }
     };
 
