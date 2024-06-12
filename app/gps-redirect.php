@@ -8,7 +8,7 @@
     </div>
     <div id="fetched-content">
         <h3>Fetched Content:</h3>
-        <textarea id="contentBox" rows="10" cols="50"></textarea>
+        <div id="contentBox"></div>
     </div>
 </div>
 
@@ -30,12 +30,12 @@
         try {
             const response = await fetch('<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php';?>');
             const data = await response.text();
-            document.getElementById('contentBox').value = data;
+            document.getElementById('contentBox').innerHTML = data;
         } catch (error) {
             console.error('Error fetching content:', error);
-            document.getElementById('contentBox').value = 'Error fetching content.';
+            document.getElementById('contentBox').innerHTML = 'Error fetching content.';
             // also show error
-            document.getElementById('contentBox').value = error;
+            document.getElementById('contentBox').innerHTML += `<p>${error}</p>`;
         }
     };
 
