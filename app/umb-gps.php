@@ -60,7 +60,7 @@
         <?php
     }
     foreach ($coordinates as $coordinate) {
-        processCoordinate($coordinate);
+        // processCoordinate($coordinate);
     }
     require_once('map-script.js'); ?>
 </script>
