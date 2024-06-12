@@ -1,6 +1,51 @@
 <?php
 require 'DatabaseConnector.php';
 
+function doesUuidExist($uuid)
+{
+    $databaseConnector = new DatabaseConnector();
+    $pdo = $databaseConnector->getConnection();
+
+    $sql = 'SELECT COUNT(*) as count FROM opendata WHERE id = :uuid;';
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $result['count'] > 0;
+}
+
+function createEntityIfNotExists($uuid)
+{
+    $databaseConnector = new DatabaseConnector();
+    $pdo = $databaseConnector->getConnection();
+
+    try {
+        // Start a transaction
+        $pdo->beginTransaction();
+
+        // Lock the table to prevent race conditions
+        $pdo->exec('LOCK TABLE opendata IN EXCLUSIVE MODE;');
+
+        // Check if the UUID exists
+        if (!doesUuidExist($uuid)) {
+            // Insert new entity if it does not exist
+            $sql = 'INSERT INTO opendata (id) VALUES (:uuid);';
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':uuid', $uuid, PDO::PARAM_STR);
+            $stmt->execute();
+        }
+
+        // Commit the transaction
+        $pdo->commit();
+    } catch (Exception $e) {
+        // Rollback the transaction in case of an error
+        $pdo->rollBack();
+        throw $e;
+    }
+}
+
 function fetchOpDataCount()
 {
     $databaseConnector = new DatabaseConnector();

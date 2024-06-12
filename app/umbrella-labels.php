@@ -67,7 +67,7 @@
                 console.log( "<?php echo $appConfig->get('url.base')
                 . $appConfig->get('url.root') . "umb/" ?>" + uuid)
                 new QRCode(document.getElementById("qrcode-" + i), {
-                    text: "http://tng.coop/umb/" + uuid,
+                    text: "http://tng.coop/opendata/umb/" + uuid,
                     width: 96, // 96px = 1 inch
                     height: 96  // 96px = 1 inch
                 });
