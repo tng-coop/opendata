@@ -28,7 +28,15 @@
         document.getElementById('longitudeGPS').textContent = `Longitude: ${longitude}`;
 
         try {
-            const response = await fetch('<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php';?>');
+            // Retrieve the UUID from the PHP session variable
+            const uuid = '<?php echo $_SESSION['umb-uuid']; ?>';
+            const baseURL = '<?php echo $appConfig->get('url.base') . $appConfig->get('url.root') . 'umb-gps.php'; ?>';
+            const urlWithUUID = `${baseURL}?uuid=${uuid}`;
+
+            // Perform the fetch request with the updated URL
+            const response = await fetch(urlWithUUID, {
+                method: 'GET',
+            });
             const data = await response.text();
             document.getElementById('contentBox').innerHTML = data;
         } catch (error) {
@@ -37,6 +45,7 @@
             // also show error
             document.getElementById('contentBox').innerHTML += `<p>${error}</p>`;
         }
+
     };
 
     document.addEventListener('DOMContentLoaded', displayGPSInfo);
