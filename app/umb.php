@@ -111,7 +111,7 @@ foreach ($data as $coordinate) {
             });
         };
 
-        // document.addEventListener('DOMContentLoaded', addMarkersFromData);        
+        document.addEventListener('DOMContentLoaded', addMarkersFromData);        
         <?php require_once ('map-script.js'); ?>
     </script>
 </body>
