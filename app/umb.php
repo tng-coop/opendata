@@ -37,6 +37,8 @@ if (!empty($uuid) && Ramsey\Uuid\Uuid::isValid($uuid)) {
             dragging: !isSmartphone() // Disable dragging only for smartphones
         });
     </script>
+
+    <div id="mapid"></div>
     <div id="gps-info" style="margin-top: 20px;">
         <div id="gps-coordinates">
         </div>
