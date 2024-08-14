@@ -11,6 +11,6 @@ test('basic homepage access2', async ({ page, baseURL } ) => {
 });
 
 test('basic homepage access3', async ({ page, baseURL } ) => {
-  await page.goto('https://tng.coop/opendata/umb/6483ce21-2e0e-4935-83f8-829571d3225f/')
+  await page.goto('https://tng.coop/opendata/umb/')
   await expect(page.locator('#mapid')).toHaveCount(1)
 });

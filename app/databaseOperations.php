@@ -102,16 +102,20 @@ function fetchLatestBBS()
     $databaseConnector = new DatabaseConnector();
     $pdo = $databaseConnector->getConnection();
 
-    // Corrected SQL query to select id, last_update, and the text of the last element in the JSON array
-    // Using PostgreSQL syntax for JSON data manipulation
+    // Updated SQL query with array check and safer JSON data manipulation
     $sql = "SELECT 
-    (json->(jsonb_array_length(json) - 1))->>'name' AS name,
-    (json->(jsonb_array_length(json) - 1))->>'district' AS district,
-    to_char(last_update, 'Mon DD, YYYY HH24:MI') AS formatted_last_update,
-    (json->(jsonb_array_length(json) - 1))->>'text' AS last_element,
-    id
-FROM opendata
-ORDER BY last_update DESC;";
+                (json->(jsonb_array_length(json) - 1))->>'name' AS name,
+                (json->(jsonb_array_length(json) - 1))->>'district' AS district,
+                to_char(last_update, 'Mon DD, YYYY HH24:MI') AS formatted_last_update,
+                (json->(jsonb_array_length(json) - 1))->>'text' AS last_element,
+                id
+            FROM 
+                opendata
+            WHERE 
+                jsonb_typeof(json) = 'array'
+            ORDER BY 
+                last_update DESC;";
+
 
 
     $stmt = $pdo->query($sql); // For a simple, parameter-less query, query() is sufficient
@@ -201,6 +205,7 @@ function fetchValidGpsData()
             FROM 
                 opendata
             WHERE 
+                jsonb_typeof(json) = 'array' AND
                 (json->(jsonb_array_length(json) - 1))->'gps' IS NOT NULL
             ORDER BY 
                 last_update DESC;";
