@@ -5,5 +5,6 @@ test('has correct URL', async ({ page, baseURL } ) => {
   await page.goto('./');
   // verify url
   await expect(page).toHaveURL(baseURL);
+  await expect(page.getByRole('heading', { name: 'Latest BBS Entries' })).toHaveCount(1);
 });
 
