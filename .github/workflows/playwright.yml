@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,24 +24,27 @@ jobs:
         run: npx playwright install
 
       - name: Run Playwright Tests
+        id: playwright-tests
         run: npm test
-        continue-on-error: true
 
-      - name: Upload Pages Artifact
+      - name: Upload Test Report
+        if: ${{ always() }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: playwright-report/
 
-  deploy:
-    needs: build
+  deploy-report:
+    needs: run-tests
     runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy Test Report to GitHub Pages
+        if: ${{ always() }}
         uses: actions/deploy-pages@v4
 
-      - name: Show Deployment URL
+      - name: Display Deployment URL
+        if: ${{ always() }}
         run: |
-          echo "Your site is live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "Your test report is live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
