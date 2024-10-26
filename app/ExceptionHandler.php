@@ -11,10 +11,11 @@ function customErrorLogger($data)
     $formattedMessage = sprintf("[%s] %s\n", $date->format('Y-m-d H:i:s'), $formattedData);
 
     // Append the formatted message to the log file
-    file_put_contents($logFilePath, $formattedMessage, FILE_APPEND  | LOCK_EX);
+    file_put_contents($logFilePath, $formattedMessage, FILE_APPEND | LOCK_EX);
 }
 
-function handleError($errno, $errstr, $errfile, $errline) {
+function handleError($errno, $errstr, $errfile, $errline)
+{
     $errorData = [
         'type' => 'Error',
         'code' => $errno,
@@ -24,7 +25,6 @@ function handleError($errno, $errstr, $errfile, $errline) {
     ];
     customErrorLogger($errorData);
 }
-
 
 // Example usage within your exception handler
 function myExceptionHandler($exception)
@@ -42,10 +42,11 @@ function myExceptionHandler($exception)
     // Use the custom logger instead of error_log
     customErrorLogger($debugData);
 
-    // Prepare a user-friendly error message for the response.
+    // Always show detailed error information in the response
     $response = [
         'success' => false,
-        'error' => 'An error occurred. Please try again later.'
+        'error' => 'An error occurred.',
+        'details' => $debugData // Include full debug details
     ];
 
     header('Content-Type: application/json');
@@ -53,5 +54,5 @@ function myExceptionHandler($exception)
     exit;
 }
 
-// Don't forget to register your custom exception handler
+// Register the custom exception handler
 set_exception_handler('myExceptionHandler');
