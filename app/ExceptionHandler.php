@@ -6,7 +6,7 @@ function customErrorLogger($data)
     // Format the data as a JSON string with pretty print for better readability
     $formattedData = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-    // Optionally, you can format the date and include it in the log message
+    // Optionally, include the date in the log message
     $date = new DateTime();
     $formattedMessage = sprintf("[%s] %s\n", $date->format('Y-m-d H:i:s'), $formattedData);
 
@@ -26,33 +26,44 @@ function handleError($errno, $errstr, $errfile, $errline)
     customErrorLogger($errorData);
 }
 
-// Example usage within your exception handler
+// Enhanced exception handler
 function myExceptionHandler($exception)
 {
-    http_response_code(500); // Set a generic server error response code.
+    http_response_code(500); // Set the HTTP status code to 500
 
     $debugData = [
         'type' => get_class($exception),
         'message' => $exception->getMessage(),
         'file' => $exception->getFile(),
         'line' => $exception->getLine(),
-        'stackTrace' => explode("\n", $exception->getTraceAsString()), // Convert stack trace to array for readability
+        'stackTrace' => explode("\n", $exception->getTraceAsString()),
     ];
 
-    // Use the custom logger instead of error_log
+    // Log the error
     customErrorLogger($debugData);
 
-    // Always show detailed error information in the response
+    // Format the error details as a readable string
+    $formattedDetails = sprintf(
+        "Exception Type: %s\nMessage: %s\nFile: %s\nLine: %d\n\nStack Trace:\n%s",
+        $debugData['type'],
+        $debugData['message'],
+        $debugData['file'],
+        $debugData['line'],
+        implode("\n", $debugData['stackTrace'])
+    );
+
+    // Prepare the response with formatted details
     $response = [
         'success' => false,
         'error' => 'An error occurred.',
-        'details' => $debugData // Include full debug details
+        'details' => nl2br($formattedDetails) // Convert newlines to <br> for readable HTML
     ];
 
     header('Content-Type: application/json');
-    echo json_encode($response);
+    // Output the JSON response with pretty print
+    echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
     exit;
 }
 
-// Register the custom exception handler
+// Register the exception handler
 set_exception_handler('myExceptionHandler');
