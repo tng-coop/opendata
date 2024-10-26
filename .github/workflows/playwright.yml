@@ -27,15 +27,16 @@ jobs:
 
     - name: Run Playwright Tests
       run: npm test
-      continue-on-error: true  # Ensures the workflow continues even if tests fail
+      continue-on-error: true  # Allows the workflow to continue even if tests fail
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-artifact@v4  # Ensure correct version is used
+      with:
+        name: github-pages  # Must match expected artifact name
+        path: playwright-report/  # Directory where Playwright report is generated
 
     - name: Configure Pages
       uses: actions/configure-pages@v4
-
-    - name: Upload Pages Artifact
-      uses: actions/upload-pages-artifact@v2
-      with:
-        path: playwright-report/
 
     - name: Deploy to GitHub Pages
       uses: actions/deploy-pages@v4
