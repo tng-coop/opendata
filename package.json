@@ -1,7 +1,12 @@
 {
   "devDependencies": {
-    "@playwright/test": "^1.42.1",
-    "@types/node": "^20.11.25"
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.8.1"
   },
-  "scripts": {}
+  "scripts": {
+	  "update-all": "npx npm-check-updates -u && rm -rf node_modules package-lock.json && npm install && npm test",
+    "pretest": "./start-dev-php-server.sh",
+    "test": "npx playwright test",
+    "posttest": "./stop-dev-php-server.sh"
+  }
 }

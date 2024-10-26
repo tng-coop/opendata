@@ -11,43 +11,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 2  # This sets the timeout for the entire job to 1 minute
-    env:
-      PLAYWRIGHT_IMAGE: mcr.microsoft.com/playwright:v1.42.1-jammy
-
-    services:
-      playwright:
-        image: mcr.microsoft.com/playwright:v1.42.1-jammy
+    timeout-minutes: 2  # This sets the timeout for the entire job to 2 minutes
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Show PHP Version
-      run: php -v
-
-    - name: Show PHP Composer Version
-      run: composer -v
-
-    - name: Run PHP
-      run: php -S localhost:8000 index.php &
-
     - name: Install dependencies
-      run: docker run --rm --network="host" -v $(pwd):/repo -w /repo ${{ env.PLAYWRIGHT_IMAGE }} npm ci
+      run: npm ci
 
-    - name: Show Playwright version
-      run: docker run --rm --network="host" -v $(pwd):/repo -w /repo ${{ env.PLAYWRIGHT_IMAGE }} npx playwright --version
+    - name: Install Playwright Browsers
+      run: npx playwright install
 
-    - name: List contents of directory before tests
-      run: tree -I node_modules
-      if: always()
+    - name: Run Tests
+      run: npm test
 
-    - name: Run Playwright Tests
-      run: docker run --rm --network="host" -e CI=true -v $(pwd):/repo -w /repo ${{ env.PLAYWRIGHT_IMAGE }} npx playwright test
-
-    - name: List contents of directory after tests
-      run: tree -I node_modules
-      if: always()
-      
     - name: Upload Test Artifacts
       uses: actions/upload-artifact@v3
       if: always()
@@ -56,5 +33,4 @@ jobs:
         path: |
           playwright-report/
           test-results/
-          php_server*.log
         retention-days: 3
