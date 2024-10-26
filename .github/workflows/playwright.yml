@@ -1,18 +1,21 @@
-name: Open Data Tests
+name: Playwright Tests and GitHub Pages Deployment
 
 on:
   push:
-    paths-ignore:
-      - '**/*.md'
+    branches:
+      - main
   pull_request:
-    paths-ignore:
-      - '**/*.md'
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  build:
+  test-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 2  # This sets the timeout for the entire job to 2 minutes
-
     steps:
     - uses: actions/checkout@v4
 
@@ -22,15 +25,16 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install
 
-    - name: Run Tests
+    - name: Run Playwright Tests
       run: npm test
 
-    - name: Upload Test Artifacts
-      uses: actions/upload-artifact@v3
-      if: always()
+    - name: Configure Pages
+      uses: actions/configure-pages@v4
+
+    - name: Upload Pages Artifact
+      uses: actions/upload-pages-artifact@v2
       with:
-        name: playwright-artifacts
-        path: |
-          playwright-report/
-          test-results/
-        retention-days: 3
+        path: playwright-report/
+
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v4
