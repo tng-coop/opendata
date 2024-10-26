@@ -35,16 +35,15 @@ jobs:
 
   deploy-report:
     needs: run-tests
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
     steps:
       - name: Deploy Test Report to GitHub Pages
-        if: ${{ always() }}
         uses: actions/deploy-pages@v4
 
       - name: Display Deployment URL
-        if: ${{ always() }}
         run: |
           echo "Your test report is live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
