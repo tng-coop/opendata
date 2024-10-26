@@ -52,16 +52,19 @@ function myExceptionHandler($exception)
         implode("\n", $debugData['stackTrace'])
     );
 
-    // Prepare the response with formatted details
+    // Prepare the main response (without details)
     $response = [
         'success' => false,
-        'error' => 'An error occurred.',
-        'details' => nl2br($formattedDetails) // Convert newlines to <br> for readable HTML
+        'error' => 'An error occurred.'
     ];
 
     header('Content-Type: application/json');
-    // Output the JSON response with pretty print
+
+    // Output the main JSON response
     echo json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+    // Output the details separately as plain text
+    echo "\n\nError Details:\n{$formattedDetails}";
     exit;
 }
 
