@@ -9,6 +9,8 @@ node_modules/
 # Playwright cache
 /playwright/.cache/
 
+*.cache
+
 # PHP Composer vendor directory
 app/vendor/
 

@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+    bootstrap="app/vendor/autoload.php"
+    colors="true"
+    stopOnFailure="true"
+    failOnRisky="true"
+    failOnWarning="true"
+>
     <testsuites>
-        <testsuite name="My Test Suite">
+        <testsuite name="Project Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <!-- Environment variables for testing -->
+        <env name="APP_ENV" value="testing"/>
+        <env name="DB_HOST" value="localhost"/>
+        <env name="DB_NAME" value="tng"/>
+        <env name="DB_USER" value="yasu"/>
+        <env name="DB_PASS" value="tng123"/>
+        <env name="DB_PORT" value="5432"/>
+    </php>
+
+    <logging>
+        <junit outputFile="./test-results/phpunit-report.xml"/>
+    </logging>
 </phpunit>
