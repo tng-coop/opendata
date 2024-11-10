@@ -35,13 +35,14 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1' # Adjust this to match your project's PHP version
-          extensions: mbstring, pdo, json
+          extensions: mbstring, pdo, pgsql, pdo_pgsql, json
           tools: composer
 
       - name: Wait for PostgreSQL to be ready
         run: |
-          for i in {1..30}; do
-            if pg_isready -h localhost -p 5432 -U postgres; then
+          for i in {1..60}; do
+            pg_isready -h 127.0.0.1 -p 5432 -U postgres
+            if [ $? -eq 0 ]; then
               echo "PostgreSQL is ready"
               break
             else
@@ -53,7 +54,7 @@ jobs:
       - name: Check PostgreSQL Status (Debug)
         run: |
           echo "Checking PostgreSQL status..."
-          pg_isready -h localhost -p 5432 -U postgres
+          pg_isready -h 127.0.0.1 -p 5432 -U postgres
           if [ $? -eq 0 ]; then
             echo "PostgreSQL is up and accepting connections."
           else
@@ -73,21 +74,21 @@ jobs:
 
       - name: Setup Database and User
         run: |
-          PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE USER yasu WITH PASSWORD 'tng123';"
-          PGPASSWORD=postgres psql -h localhost -U postgres -c "ALTER USER yasu CREATEDB;"
-          PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE tng OWNER yasu;"
+          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "CREATE USER yasu WITH PASSWORD 'tng123';"
+          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "ALTER USER yasu CREATEDB;"
+          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE tng OWNER yasu;"
         env:
           PGPASSWORD: postgres
 
       - name: Test Database Connection
         run: |
-          PGPASSWORD='tng123' psql -h localhost -p 5432 -U yasu -d tng -c '\q'
+          PGPASSWORD='tng123' psql -h 127.0.0.1 -p 5432 -U yasu -d tng -c '\q'
         env:
           PGPASSWORD: tng123
 
       - name: Apply Database Schema
         run: |
-          PGPASSWORD='tng123' psql -h localhost -U yasu -d tng -f opendata_schema.sql
+          PGPASSWORD='tng123' psql -h 127.0.0.1 -U yasu -d tng -f opendata_schema.sql
         env:
           PGPASSWORD: tng123
 
