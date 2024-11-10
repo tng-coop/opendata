@@ -31,6 +31,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up PHP with Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1' # Adjust this to match your project's PHP version
+          extensions: mbstring, pdo, json
+          tools: composer
+
       - name: Wait for PostgreSQL to be ready
         run: |
           for i in {1..30}; do
@@ -66,7 +73,12 @@ jobs:
       - name: Copy app-yasu.json to app.json
         run: cp app-yasu.json app.json
 
-      - name: Install dependencies
+      - name: Install PHP Dependencies (Vendor Directory)
+        run: |
+          cd app
+          composer install
+
+      - name: Install Node.js dependencies
         run: npm ci
 
       - name: Install Playwright Browsers
