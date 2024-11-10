@@ -97,7 +97,7 @@ jobs:
 
       - name: Update Port in app.json
         run: |
-          sed -i 's/"port": "5432"/"port": "5532"/' app.json
+          sed -i 's/"port": "5532"/"port": "5432"/' app.json
 
       - name: Install PHP Dependencies (Vendor Directory)
         run: |
