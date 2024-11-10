@@ -1,9 +1,31 @@
-node_modules
+# Node.js dependencies
+node_modules/
+
+# Test and coverage reports
 /test-results/
 /playwright-report/
 /blob-report/
+
+# Playwright cache
 /playwright/.cache/
-app/vendor
+
+# PHP Composer vendor directory
+app/vendor/
+
+# Temporary PHP server files
 php_server_*
+
+# Custom error logs or generated files
 custom_error*
+
+# Sensitive or generated configuration files
 app.json
+
+# General IDE or editor files
+.idea/
+.vscode/
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
