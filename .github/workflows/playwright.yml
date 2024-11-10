@@ -57,6 +57,12 @@ jobs:
         env:
           PGPASSWORD: tng123
 
+      - name: Apply Database Schema
+        run: |
+          PGPASSWORD='tng123' psql -h localhost -U yasu -d tng -f opendata_schema.sql
+        env:
+          PGPASSWORD: tng123
+
       - name: Install dependencies
         run: npm ci
 
