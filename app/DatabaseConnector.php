@@ -35,12 +35,13 @@ class DatabaseConnector
     {
         if ($this->pdo === null) {
             try {
+                echo "Connecting to DSN: {$this->dsn}\n"; // Debug line
                 $this->pdo = new PDO($this->dsn, $this->user, $this->pass, $this->options);
             } catch (PDOException $e) {
-                // Consider logging this error instead of directly throwing
                 throw new PDOException($e->getMessage(), (int)$e->getCode());
             }
         }
         return $this->pdo;
     }
+    
 }
