@@ -63,6 +63,9 @@ jobs:
         env:
           PGPASSWORD: tng123
 
+      - name: Copy app-yasu.json to app.json
+        run: cp app-yasu.json app.json
+
       - name: Install dependencies
         run: npm ci
 
