@@ -107,6 +107,12 @@ jobs:
       - name: Run PHP Unit Tests
         run: |
           ./app/vendor/bin/phpunit --configuration phpunit.xml 
+        env:
+          DB_USER: yasu
+          DB_PASSWORD: tng123
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5532
+          DB_NAME: tng
 
       - name: Install Node.js dependencies
         run: npm ci
