@@ -95,6 +95,10 @@ jobs:
       - name: Copy app-yasu.json to app.json
         run: cp app-yasu.json app.json
 
+      - name: Update Port in app.json
+        run: |
+          sed -i 's/"port": "5432"/"port": "5532"/' app.json
+
       - name: Install PHP Dependencies (Vendor Directory)
         run: |
           cd app
