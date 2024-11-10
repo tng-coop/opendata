@@ -101,8 +101,7 @@ jobs:
 
       - name: Run PHP Unit Tests
         run: |
-          cd app
-          ./vendor/bin/phpunit --configuration phpunit.xml
+          ./app/vendor/bin/phpunit --configuration phpunit.xml 
 
       - name: Install Node.js dependencies
         run: npm ci
