@@ -41,7 +41,7 @@ jobs:
       - name: Wait for PostgreSQL to be ready
         run: |
           for i in {1..30}; do
-            if pg_isready -h localhost -U postgres; then
+            if pg_isready -h localhost -p 5432 -U postgres; then
               echo "PostgreSQL is ready"
               break
             else
@@ -49,6 +49,27 @@ jobs:
               sleep 2
             fi
           done
+
+      - name: Check PostgreSQL Status (Debug)
+        run: |
+          echo "Checking PostgreSQL status..."
+          pg_isready -h localhost -p 5432 -U postgres
+          if [ $? -eq 0 ]; then
+            echo "PostgreSQL is up and accepting connections."
+          else
+            echo "PostgreSQL is not accepting connections. Exiting."
+            exit 1
+          fi
+
+      - name: Check Open Ports (Debug)
+        run: |
+          echo "Checking open ports..."
+          netstat -an | grep 5432 || echo "Port 5432 is not open."
+
+      - name: List Running Processes (Debug)
+        run: |
+          echo "Listing PostgreSQL processes..."
+          ps aux | grep postgres
 
       - name: Setup Database and User
         run: |
