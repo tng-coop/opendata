@@ -27,8 +27,9 @@ class DatabaseConnector
             $appConfig->get('database.dbname')
         );
 
-        $this->user = get_current_user(); // Use the current Unix user
-        $this->pass = $appConfig->get('database.pass'); // Use the password from the configuration
+        // Retrieve the username and password from the configuration
+        $this->user = $appConfig->get('database.user'); // Set the username from config
+        $this->pass = $appConfig->get('database.pass'); // Set the password from config
     }
 
     public function getConnection()
@@ -43,5 +44,4 @@ class DatabaseConnector
         }
         return $this->pdo;
     }
-    
 }
