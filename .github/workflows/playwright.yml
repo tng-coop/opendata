@@ -124,6 +124,16 @@ jobs:
         with:
           path: playwright-report/
 
+      - name: Check Non-Loopback IP Address (Method 1)
+        run: |
+          echo "Non-Loopback IP Addresses (Method 1):"
+          ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d'/' -f1
+
+      - name: Check Non-Loopback IP Address (Method 2)
+        run: |
+          echo "Non-Loopback IP Addresses (Method 2):"
+          hostname -I | awk '{print $1}'
+
   deploy-report:
     needs: run-tests
     if: ${{ always() }}
