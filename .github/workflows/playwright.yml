@@ -74,21 +74,21 @@ jobs:
 
       - name: Setup Database and User
         run: |
-          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "CREATE USER runner WITH PASSWORD 'tng123';"
-          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "ALTER USER runner CREATEDB;"
-          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE tng OWNER runner;"
+          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "CREATE USER yasu WITH PASSWORD 'tng123';"
+          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "ALTER USER yasu CREATEDB;"
+          PGPASSWORD=postgres psql -h 127.0.0.1 -U postgres -c "CREATE DATABASE tng OWNER yasu;"
         env:
           PGPASSWORD: postgres
 
       - name: Test Database Connection
         run: |
-          PGPASSWORD='tng123' psql -h 127.0.0.1 -p 5432 -U runner -d tng -c '\q'
+          PGPASSWORD='tng123' psql -h 127.0.0.1 -p 5432 -U yasu -d tng -c '\q'
         env:
           PGPASSWORD: tng123
 
       - name: Apply Database Schema
         run: |
-          PGPASSWORD='tng123' psql -h 127.0.0.1 -U runner -d tng -f opendata_schema.sql
+          PGPASSWORD='tng123' psql -h 127.0.0.1 -U yasu -d tng -f opendata_schema.sql
         env:
           PGPASSWORD: tng123
 
