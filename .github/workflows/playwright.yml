@@ -124,7 +124,7 @@ jobs:
         id: playwright-tests
         run: npm test
         env:
-          PLAYWRIGHT_BASE_URL: http://$NON_LOOPBACK_IP:8000/
+          PLAYWRIGHT_BASE_URL: http://${{ env.NON_LOOPBACK_IP }}:8000/
 
       - name: Upload Test Report
         if: ${{ always() }}
