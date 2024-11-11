@@ -104,6 +104,7 @@ jobs:
         run: |
           NON_LOOPBACK_IP=$(ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d'/' -f1 | head -n 1)
           echo "NON_LOOPBACK_IP=$NON_LOOPBACK_IP" >> $GITHUB_ENV
+          sed -i "s|\"base\": \"http://.*:8000\"|\"base\": \"http://$NON_LOOPBACK_IP:8000\"|" app.json
 
       - name: Install PHP Dependencies (Vendor Directory)
         run: |
