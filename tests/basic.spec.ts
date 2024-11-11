@@ -1,6 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from './fixtures/mergedFixtures';
 
-test('has correct URL', async ({ page, baseURL } ) => {
+test('has correct URL', async ({ page, baseURL }) => {
   if (!baseURL) { throw new Error('baseURL is not defined') }
   await page.goto('./');
   // verify url
@@ -11,7 +12,7 @@ test('has correct URL', async ({ page, baseURL } ) => {
   await page.getByLabel('Text Editor:').fill('bb');
   await page.getByRole('button', { name: 'Submit' }).click();
   await page.goto('/');
-  
+
   await expect(page.getByRole('heading', { name: 'Latest BBS Entries' })).toHaveCount(1);
 });
 
