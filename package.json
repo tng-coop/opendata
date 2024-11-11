@@ -5,8 +5,7 @@
   },
   "scripts": {
 	  "update-all": "npx npm-check-updates -u && rm -rf node_modules package-lock.json && npm install && npm test",
-    "pretest": "./start-dev-php-server.sh",
-    "test": "npx playwright test",
-    "posttest": "./stop-dev-php-server.sh"
+    "pretest": "./create-user.sh &&  ./start-dev-php-server.sh",
+    "test": "npx playwright test"
   }
 }
