@@ -2,6 +2,7 @@
     "database": {
         "host": "localhost",
         "dbname": "tng",
+        "user": "yasu",
         "pass": "tng123",
         "port": "5532"
     },
