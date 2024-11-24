@@ -1,7 +1,7 @@
 {
   "devDependencies": {
-    "@playwright/test": "^1.48.2",
-    "@types/node": "^22.8.1"
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.9.3"
   },
   "scripts": {
 	  "update-all": "npx npm-check-updates -u && rm -rf node_modules package-lock.json && npm install && npm test",
