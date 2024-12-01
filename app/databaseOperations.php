@@ -1,5 +1,5 @@
 <?php
-require 'DatabaseConnector.php';
+require_once 'DatabaseConnector.php';
 
 function doesUuidExist($uuid)
 {
