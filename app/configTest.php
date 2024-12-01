@@ -46,11 +46,40 @@ class AppConfigTest extends TestCase
 
     public function testBaseURLIsValid()
     {
+        // Fetch non-loopback IP dynamically
+        $nonLoopbackIP = $this->getNonLoopbackIP();
+        
+        // Build the expected base URL
+        $expectedBaseURL = "http://$nonLoopbackIP:8000";
+        
+        // Retrieve base URL from appConfig
         $baseURL = $this->appConfig->get('url.base');
+        
+        // Assert base URL is valid
         $this->assertIsString($baseURL, 'Base URL should be a string.');
-        $this->assertEquals('http://10.11.12.122:8000', $baseURL, 'Base URL should match the expected value.');
+        $this->assertEquals($expectedBaseURL, $baseURL, 'Base URL should match the expected value.');
     }
-
+    
+    /**
+     * Get the first non-loopback IP address of the server.
+     */
+    private function getNonLoopbackIP(): string
+    {
+        // Execute shell command to find the non-loopback IP
+        $output = shell_exec("ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d'/' -f1 | head -n 1");
+    
+        // Trim and return the result
+        $nonLoopbackIP = trim($output);
+    
+        // Validate result
+        if (filter_var($nonLoopbackIP, FILTER_VALIDATE_IP)) {
+            return $nonLoopbackIP;
+        }
+    
+        // Fallback to default or throw an exception if no valid IP is found
+        throw new RuntimeException('Unable to determine the non-loopback IP address.');
+    }
+    
     public function testRootURLIsValid()
     {
         $rootURL = $this->appConfig->get('url.root');
