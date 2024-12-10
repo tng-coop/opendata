@@ -1,8 +1,7 @@
 <?php
-function customErrorLogger($data)
-{
-    $logFilePath = __DIR__ . '/../custom_error.log';
 
+function customErrorLogger($data, $logFilePath = __DIR__ . '/../custom_error.log')
+{
     // Format the data as a JSON string with pretty print for better readability
     $formattedData = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
@@ -14,7 +13,7 @@ function customErrorLogger($data)
     file_put_contents($logFilePath, $formattedMessage, FILE_APPEND | LOCK_EX);
 }
 
-function handleError($errno, $errstr, $errfile, $errline)
+function handleError($errno, $errstr, $errfile, $errline, $logFilePath = __DIR__ . '/../custom_error.log')
 {
     $errorData = [
         'type' => 'Error',
@@ -23,11 +22,11 @@ function handleError($errno, $errstr, $errfile, $errline)
         'file' => $errfile,
         'line' => $errline,
     ];
-    customErrorLogger($errorData);
+    customErrorLogger($errorData, $logFilePath);
 }
 
 // Enhanced exception handler
-function myExceptionHandler($exception)
+function myExceptionHandler($exception, $logFilePath = __DIR__ . '/../custom_error.log')
 {
     http_response_code(500); // Set the HTTP status code to 500
 
@@ -40,7 +39,7 @@ function myExceptionHandler($exception)
     ];
 
     // Log the error
-    customErrorLogger($debugData);
+    customErrorLogger($debugData, $logFilePath);
 
     // Format the error details as a readable string
     $formattedDetails = sprintf(
@@ -68,5 +67,11 @@ function myExceptionHandler($exception)
     exit;
 }
 
-// Register the exception handler
-set_exception_handler('myExceptionHandler');
+// Register the handlers with their default log file path
+set_exception_handler(function($exception) {
+    myExceptionHandler($exception);
+});
+
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    handleError($errno, $errstr, $errfile, $errline);
+});
