@@ -50,6 +50,7 @@
     </script>
 </head>
 <body>
+    <!-- umbrella-labels page -->
     <div class="print-button no-print">
         <button onclick="window.print()">Print this page</button>
     </div>

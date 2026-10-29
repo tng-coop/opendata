@@ -1,5 +1,7 @@
 <?php
 
+global $uri, $method;
+
 use Ramsey\Uuid\Uuid;
 function goToTop()
 {
